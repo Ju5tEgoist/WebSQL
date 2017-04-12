@@ -22,9 +22,9 @@ public class Find implements Command {
         FindProperties findProperties = new FindProperties();
         View view = new ConsoleManager();
         view.write("For view table, please, enter the name: find <tableName> or find <tableName LIMIT/OFFSET>");
-        String[] tableNames = findProperties.getTableNames(new ConnectParameters().getDatabase());
+       // String[] tableNames = findProperties.getTableNames(new ConnectParameters().getDatabase());
         String result = view.read();
         String[] parts = result.split(" ") ;
-        findProperties.getSelectedTableName(tableNames, result, parts);
+      //  findProperties.tablePresentationLO(tableNames, result, parts);
     }
 }

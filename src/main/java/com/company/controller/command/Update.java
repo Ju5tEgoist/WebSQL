@@ -28,10 +28,10 @@ public class Update implements Command {
         TablePresenter tablePresenter = new TablePresenter();
         view.write("This table: ");
         ResultSet rs = getResultSet(tableName);
-        tablePresenter.showTable(tableName);
+      //  tablePresenter.showTable(tableName);
         UpdateTableQueryBuilder updateTableQueryBuilder = new UpdateTableQueryBuilder();
         updateTableQueryBuilder.build(tableName, rs, getColumnNumber());
-        tablePresenter.showTable(tableName);
+     //   tablePresenter.showTable(tableName);
     }
 
     private int getColumnNumber() {

@@ -1,5 +1,10 @@
 package com.company.controller.servise;
 
+import com.company.controller.query.parameter.ConnectParameters;
+import com.company.model.DatabaseManager;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -25,5 +30,17 @@ public class ServiceImp implements Service {
             }
         }
         return commandsList;
+    }
+
+    @Override
+    public Set<String> getList() throws SQLException {
+        Set<String> list = new HashSet<>();
+        ResultSet resultSet = DatabaseManager.getConnection().getMetaData().getTables(new ConnectParameters()
+                .getDatabase(), "public", "%", null);
+        int databaseIndex = 3;
+        while (resultSet.next()) {
+             list.add(resultSet.getString(databaseIndex));
+        }
+        return list;
     }
 }

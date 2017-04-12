@@ -26,10 +26,10 @@ public class Delete implements Command {
     public void execute() throws CommandExecutionException, SQLException {
         TablePresenter tablePresenter = new TablePresenter();
         String tableName = clearParametersProvider.getParameters().getTableName();
-        tablePresenter.showColumns(tableName);
-        tablePresenter.showTable(tableName);
+     //   tablePresentationLO.showColumns(tableName);
+     //   tablePresentationLO.showTable(tableName);
         DeleteTableQueryBuilder updateTableQueryBuilder = new DeleteTableQueryBuilder();
         updateTableQueryBuilder.build(tableName);
-        tablePresenter.showTable(tableName);
+      //  tablePresentationLO.showTable(tableName);
     }
 }
