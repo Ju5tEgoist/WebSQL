@@ -13,8 +13,15 @@
     <title>WebSQL</title>
 </head>
 <body>
+<table>
 <c:forEach items="${tabledata}"  var="data" >
-    <a href="${data}">${data}</a>
+    <tr>
+        <td>  <c:out value="${data.key}"/></td>
+    <c:forEach items="${data.value}"  var="val">
+        <td><c:out value="${val}"/></td>
+    </c:forEach>
+    </tr>
 </c:forEach>
+</table>
 </body>
 </html>
