@@ -4,8 +4,6 @@ import com.company.controller.servise.Service;
 import com.company.controller.servise.ServiceImp;
 import com.company.model.DatabaseManager;
 import com.company.model.FindProperties;
-import com.company.view.TablePresenter;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -45,8 +43,9 @@ public class MainServlet extends HttpServlet {
             }
             req.getRequestDispatcher("list.jsp").forward(req, resp);
         } else if (action.startsWith("/find")) {
-
             req.getRequestDispatcher("find.jsp").forward(req, resp);
+        }else if(action.startsWith("/drop")){
+            req.getRequestDispatcher("drop.jsp").forward(req, resp);
         } else {
             req.getRequestDispatcher("error.jsp").forward(req, resp);
         }
@@ -79,6 +78,16 @@ public class MainServlet extends HttpServlet {
             try {
                 req.setAttribute("tabledata", findProperties.tablePresentation(tableName, limitOffset));
                 req.getRequestDispatcher("table.jsp").forward(req, resp);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        if (action.startsWith("/drop")) {
+            String tableName = req.getParameter("tName");
+            try {
+                service.dropTable(tableName);
+           // TODO forward to menu
+                //     req.getRequestDispatcher("menu.jsp").forward(req, resp);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
