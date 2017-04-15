@@ -26,11 +26,12 @@ public class MainServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = getAction(req);
-//        forwardToJSP(action, req, resp);
+        //forwardToJSP(action, req, resp);
         if (action.startsWith("/menu") || action.equals("/")) {
             req.setAttribute("items", service.getCommandsList().keySet());
             req.getRequestDispatcher("menu.jsp").forward(req, resp);
-        } else if (action.startsWith("/help")) {
+        }
+        if (action.startsWith("/help")) {
             req.setAttribute("items", service.getCommandsList());
             req.getRequestDispatcher("help.jsp").forward(req, resp);
         } else if (action.startsWith("/connect")) {
@@ -46,6 +47,8 @@ public class MainServlet extends HttpServlet {
             req.getRequestDispatcher("find.jsp").forward(req, resp);
         }else if(action.startsWith("/drop")){
             req.getRequestDispatcher("drop.jsp").forward(req, resp);
+        }else if(action.startsWith("/clear")){
+            req.getRequestDispatcher("clear.jsp").forward(req, resp);
         } else {
             req.getRequestDispatcher("error.jsp").forward(req, resp);
         }
@@ -71,28 +74,39 @@ public class MainServlet extends HttpServlet {
                 req.getRequestDispatcher("error.jsp").forward(req, resp);
             }
         }
-        if (action.startsWith("/find")) {
+        else if (action.startsWith("/find")) {
             String tableName = req.getParameter("tName");
             String limitOffset = req.getParameter("LO");
             FindProperties findProperties = new FindProperties();
             try {
                 req.setAttribute("tabledata", findProperties.tablePresentation(tableName, limitOffset));
                 req.getRequestDispatcher("table.jsp").forward(req, resp);
+                resp.sendRedirect(resp.encodeRedirectURL("menu"));
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        if (action.startsWith("/drop")) {
+        else if (action.startsWith("/drop")) {
             String tableName = req.getParameter("tName");
             try {
                 service.dropTable(tableName);
-           // TODO forward to menu
-                //     req.getRequestDispatcher("menu.jsp").forward(req, resp);
+                resp.sendRedirect(resp.encodeRedirectURL("menu"));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (action.startsWith("/clear")) {
+            String tableName = req.getParameter("tName");
+            try {
+                service.clearTable(tableName);
+                resp.sendRedirect(resp.encodeRedirectURL("menu"));
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
     }
+
+
 
 //    private void forwardToJSP(String action, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 //        for (String command : service.getCommandsList().keySet()) {

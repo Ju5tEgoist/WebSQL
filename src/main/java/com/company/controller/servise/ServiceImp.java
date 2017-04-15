@@ -43,4 +43,18 @@ public class ServiceImp implements Service {
         }
         return list;
     }
+
+    @Override
+    public void dropTable(String tableName) throws SQLException {
+       String query = "DROP TABLE " + tableName;
+       DatabaseManager databaseManager = new DatabaseManager();
+       databaseManager.getStatement().executeUpdate(query);
+    }
+
+    @Override
+    public void clearTable(String tableName) throws SQLException {
+        String query = "DELETE FROM " + tableName;
+        DatabaseManager databaseManager = new DatabaseManager();
+        databaseManager.getStatement().executeUpdate(query);
+    }
 }

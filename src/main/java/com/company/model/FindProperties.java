@@ -5,6 +5,7 @@ import com.company.controller.servise.ServiceImp;
 import com.company.view.TablePresenter;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by yulia on 04.10.16.
@@ -15,7 +16,7 @@ public class FindProperties {
     Service service = new ServiceImp();
     String selectedTableName;
 
-    public List<String> tablePresentationLO(String tableNameUser, String limitOffset) throws SQLException {
+    public Map<String, List<String>> tablePresentationLO(String tableNameUser, String limitOffset) throws SQLException {
         int limit = 0;
         int offset = 0;
         String limitString;
@@ -44,7 +45,7 @@ public class FindProperties {
     }
 
 
-    public List<String> tablePresentation(String tableNameUser, String limitOffset) throws SQLException {
+    public Map<String, List<String>> tablePresentation(String tableNameUser, String limitOffset) throws SQLException {
         if (!limitOffset.equals("")) {
             tablePresentationLO(tableNameUser, limitOffset);
         }
