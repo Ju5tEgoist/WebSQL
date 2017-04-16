@@ -49,6 +49,8 @@ public class MainServlet extends HttpServlet {
             req.getRequestDispatcher("drop.jsp").forward(req, resp);
         }else if(action.startsWith("/clear")){
             req.getRequestDispatcher("clear.jsp").forward(req, resp);
+        }else if(action.equals("/create")){
+            req.getRequestDispatcher("create.jsp").forward(req, resp);
         } else {
             req.getRequestDispatcher("error.jsp").forward(req, resp);
         }
@@ -73,8 +75,7 @@ public class MainServlet extends HttpServlet {
                 req.setAttribute("message", e.getMessage());
                 req.getRequestDispatcher("error.jsp").forward(req, resp);
             }
-        }
-        else if (action.startsWith("/find")) {
+        } else if (action.startsWith("/find")) {
             String tableName = req.getParameter("tName");
             String limitOffset = req.getParameter("LO");
             FindProperties findProperties = new FindProperties();
@@ -85,8 +86,7 @@ public class MainServlet extends HttpServlet {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }
-        else if (action.startsWith("/drop")) {
+        } else if (action.startsWith("/drop")) {
             String tableName = req.getParameter("tName");
             try {
                 service.dropTable(tableName);
@@ -94,14 +94,34 @@ public class MainServlet extends HttpServlet {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }
-        else if (action.startsWith("/clear")) {
+        } else if (action.startsWith("/clear")) {
             String tableName = req.getParameter("tName");
             try {
                 service.clearTable(tableName);
                 resp.sendRedirect(resp.encodeRedirectURL("menu"));
             } catch (SQLException e) {
                 e.printStackTrace();
+            }
+        } else if (action.equals("/create")) {
+            service.setTableName(req.getParameter("tName"));
+            service.setColumnsNumber(req.getParameter("cNumber"));
+            req.getRequestDispatcher("createColumns.jsp").forward(req, resp);
+            service.setCounter(1);
+        } else if (action.equals("/createColumns")) {
+            String columnName = req.getParameter("cName");
+            service.addName(columnName);
+            if(service.getCounter() < service.getColumnsNumber()){
+                req.getRequestDispatcher("createColumns.jsp").forward(req, resp);
+
+            }
+            else {
+                try {
+                    service.getCreateParameters();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                resp.sendRedirect(resp.encodeRedirectURL("menu"));
+              //  req.getRequestDispatcher("menu.jsp").forward(req, resp);
             }
         }
     }
