@@ -1,7 +1,5 @@
 package com.company.controller.command;
 
-import com.company.view.ConsoleManager;
-import com.company.view.View;
 
 /**
  * Created by yulia on 08.11.16.
@@ -28,7 +26,6 @@ public class Help implements Command {
 
     @Override
     public void execute(){
-        View view = new ConsoleManager();
-        view.write(INFO);
+
     }
 }

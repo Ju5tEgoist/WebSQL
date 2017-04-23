@@ -18,11 +18,12 @@ public class InsertTableQueryBuilder implements QueryBuilder <Parameters> {
     public String build(Parameters parameters) throws SQLException {
         ResultSet rs = new DatabaseManager().getStatement().executeQuery("SELECT * FROM " + parameters.getTableName());
         InsertColumnDefinitionProvider insertColumnDefinitionProvider = new InsertColumnDefinitionProvider();
-        List<InsertUpdateDeleteColumnDefinition> insertColumnDefinition = insertColumnDefinitionProvider.getProperties(rs);
-        String propertiesValue = getPropertiesValue(rs, insertColumnDefinition);
-        String propertiesColumn = getPropertiesColumn(rs, insertColumnDefinition);
-        return "INSERT INTO " + parameters.getTableName() + " " + "(" + propertiesColumn + ")" + " "
-                + "VALUES" + " " + "(" + propertiesValue + ")";
+//        List<InsertUpdateDeleteColumnDefinition> insertColumnDefinition = insertColumnDefinitionProvider.getProperties(rs);
+//        String propertiesValue = getPropertiesValue(rs, insertColumnDefinition);
+//        String propertiesColumn = getPropertiesColumn(rs, insertColumnDefinition);
+//        return "INSERT INTO " + parameters.getTableName() + " " + "(" + propertiesColumn + ")" + " "
+//                + "VALUES" + " " + "(" + propertiesValue + ")";
+        return null;
     }
 
     private String getPropertiesValue(ResultSet rs, List<InsertUpdateDeleteColumnDefinition> insertColumnDefinition) throws SQLException {

@@ -1,20 +1,40 @@
 package com.company.controller.command;
 
 import com.company.controller.query.builder.DeleteTableQueryBuilder;
-import com.company.controller.query.parameter.provider.ClearParametersProvider;
 import com.company.model.exception.CommandExecutionException;
-import com.company.view.TablePresenter;
-
 import java.sql.SQLException;
 
 /**
  * Created by yulia on 21.02.17.
  */
 public class Delete implements Command {
-    private ClearParametersProvider clearParametersProvider;
+    private String tableName;
+    private String columnName;
+    private String value;
 
-    public Delete() {
-        this.clearParametersProvider = new ClearParametersProvider();
+    public String getColumnName() {
+        return columnName;
+    }
+
+    public void setColumnName(String columnName) {
+        this.columnName = columnName;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+            this.tableName = tableName;
     }
 
     @Override
@@ -24,12 +44,7 @@ public class Delete implements Command {
 
     @Override
     public void execute() throws CommandExecutionException, SQLException {
-        TablePresenter tablePresenter = new TablePresenter();
-        String tableName = clearParametersProvider.getParameters().getTableName();
-     //   tablePresentationLO.showColumns(tableName);
-     //   tablePresentationLO.showTable(tableName);
         DeleteTableQueryBuilder updateTableQueryBuilder = new DeleteTableQueryBuilder();
-        updateTableQueryBuilder.build(tableName);
-      //  tablePresentationLO.showTable(tableName);
+        updateTableQueryBuilder.build(tableName, columnName, value);
     }
 }

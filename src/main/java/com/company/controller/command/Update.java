@@ -1,11 +1,8 @@
 package com.company.controller.command;
 
 import com.company.controller.query.builder.UpdateTableQueryBuilder;
-import com.company.controller.query.parameter.provider.ClearParametersProvider;
 import com.company.model.DatabaseManager;
-import com.company.view.ConsoleManager;
 import com.company.view.TablePresenter;
-import com.company.view.View;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,7 +12,6 @@ import java.sql.SQLException;
  */
 public class Update implements Command {
 
-    View view = new ConsoleManager();
 
     @Override
     public boolean shouldExecute(String command) {
@@ -24,19 +20,20 @@ public class Update implements Command {
 
     @Override
     public void execute() throws SQLException {
-        String tableName = new ClearParametersProvider().getParameters().getTableName();
-        TablePresenter tablePresenter = new TablePresenter();
-        view.write("This table: ");
-        ResultSet rs = getResultSet(tableName);
-      //  tablePresenter.showTable(tableName);
-        UpdateTableQueryBuilder updateTableQueryBuilder = new UpdateTableQueryBuilder();
-        updateTableQueryBuilder.build(tableName, rs, getColumnNumber());
-     //   tablePresenter.showTable(tableName);
+//       // String tableName = new ClearParametersProvider().getParameters().getTableName();
+//        TablePresenter tablePresenter = new TablePresenter();
+//        view.write("This table: ");
+//        ResultSet rs = getResultSet(tableName);
+//      //  tablePresenter.showTable(tableName);
+//        UpdateTableQueryBuilder updateTableQueryBuilder = new UpdateTableQueryBuilder();
+//        updateTableQueryBuilder.build(tableName, rs, getColumnNumber());
+//     //   tablePresenter.showTable(tableName);
     }
 
     private int getColumnNumber() {
-        view.write("Now enter the column number in which you want change value");
-        return Integer.valueOf(view.read());
+//        view.write("Now enter the column number in which you want change value");
+//        return Integer.valueOf(view.read());
+        return 1;
     }
 
     private ResultSet getResultSet(String tableName) throws SQLException {

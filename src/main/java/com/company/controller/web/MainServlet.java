@@ -1,9 +1,12 @@
 package com.company.controller.web;
 
+import com.company.controller.command.Delete;
 import com.company.controller.servise.Service;
 import com.company.controller.servise.ServiceImp;
 import com.company.model.DatabaseManager;
 import com.company.model.FindProperties;
+import com.company.model.exception.CommandExecutionException;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,10 +20,12 @@ import java.sql.SQLException;
 public class MainServlet extends HttpServlet {
 
     Service service;
+    Delete delete;
     @Override
     public void init() throws ServletException {
         super.init();
         service = new ServiceImp();
+        delete = new Delete();
     }
 
     @Override
@@ -51,6 +56,8 @@ public class MainServlet extends HttpServlet {
             req.getRequestDispatcher("clear.jsp").forward(req, resp);
         }else if(action.equals("/create")){
             req.getRequestDispatcher("create.jsp").forward(req, resp);
+        }else if(action.equals("/delete")){
+            req.getRequestDispatcher("delete.jsp").forward(req, resp);
         } else {
             req.getRequestDispatcher("error.jsp").forward(req, resp);
         }
@@ -124,6 +131,32 @@ public class MainServlet extends HttpServlet {
               //  req.getRequestDispatcher("menu.jsp").forward(req, resp);
             }
         }
+        else if (action.equals("/delete")) {
+            String tableName = req.getParameter("tName");
+            FindProperties findProperties = new FindProperties();
+            try {
+                delete.setTableName(tableName);
+                req.setAttribute("tabledata", findProperties.tablePresentation(tableName, ""));
+                req.getRequestDispatcher("tableDelete.jsp").forward(req, resp);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        else if(action.equals("/tableDelete")){
+            String value = req.getParameter("value");
+            String columnName = req.getParameter("columnName");
+            delete.setColumnName(columnName);
+            delete.setValue(value);
+            try {
+                 delete.execute();
+            } catch (CommandExecutionException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            resp.sendRedirect(resp.encodeRedirectURL("menu"));
+        }
+
     }
 
 

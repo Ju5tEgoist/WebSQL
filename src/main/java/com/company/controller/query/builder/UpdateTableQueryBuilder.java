@@ -15,15 +15,15 @@ public class UpdateTableQueryBuilder {
 
     public String build(String tableName, ResultSet rs, int columnNumber) throws SQLException {
         UpdateProvider updateProvider = new UpdateProvider();
-        List<InsertUpdateDeleteColumnDefinition> updateColumnDefinition = updateProvider.getProperties(rs);
-        String propertiesColumn = getColumnName(updateColumnDefinition, columnNumber);
-        String propertiesNeighbourColumn = getColumnName(updateColumnDefinition, getNeighborColumnNumber(columnNumber));
-        String propertiesValue = getValue(updateColumnDefinition, columnNumber);
-        String propertiesNeighbourValue = getValue(updateColumnDefinition, getNeighborColumnNumber(columnNumber));
-        String sql = "UPDATE " + tableName + " " + "SET" + " " + propertiesColumn + " " + "=" + " "
-                + propertiesValue + " " + "WHERE" + " " + propertiesNeighbourColumn + " " + "=" + propertiesNeighbourValue ;
-        new UpdateSqlQueryExecutor().execute(sql);
-        return sql;
+//        List<InsertUpdateDeleteColumnDefinition> updateColumnDefinition = updateProvider.getProperties(rs);
+//        String propertiesColumn = getColumnName(updateColumnDefinition, columnNumber);
+//        String propertiesNeighbourColumn = getColumnName(updateColumnDefinition, getNeighborColumnNumber(columnNumber));
+//        String propertiesValue = getValue(updateColumnDefinition, columnNumber);
+//        String propertiesNeighbourValue = getValue(updateColumnDefinition, getNeighborColumnNumber(columnNumber));
+//        String sql = "UPDATE " + tableName + " " + "SET" + " " + propertiesColumn + " " + "=" + " "
+//                + propertiesValue + " " + "WHERE" + " " + propertiesNeighbourColumn + " " + "=" + propertiesNeighbourValue ;
+//        new UpdateSqlQueryExecutor().execute(sql);
+        return null;
     }
 
     private String getValue( List<InsertUpdateDeleteColumnDefinition> updateColumnDefinition, int columnNumber) {
