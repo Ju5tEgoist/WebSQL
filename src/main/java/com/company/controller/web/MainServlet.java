@@ -56,6 +56,8 @@ public class MainServlet extends HttpServlet {
             req.getRequestDispatcher("clear.jsp").forward(req, resp);
         }else if(action.equals("/create")){
             req.getRequestDispatcher("create.jsp").forward(req, resp);
+        }else if(action.equals("/insert")){
+            req.getRequestDispatcher("insert.jsp").forward(req, resp);
         }else if(action.equals("/delete")){
             req.getRequestDispatcher("delete.jsp").forward(req, resp);
         } else {
@@ -155,6 +157,30 @@ public class MainServlet extends HttpServlet {
                 e.printStackTrace();
             }
             resp.sendRedirect(resp.encodeRedirectURL("menu"));
+        } else if (action.equals("/insert")) {
+            service.setTableName(req.getParameter("tName"));
+            req.getRequestDispatcher("insertColumns.jsp").forward(req, resp);
+            service.setCounter(1);
+        } else if (action.equals("/insertColumns")) {
+            String value = req.getParameter("value");
+            service.addValue(value);
+            try {
+                if(service.getCounter() < service.getInsertColumnsNumber()){
+                    req.getRequestDispatcher("insertColumns.jsp").forward(req, resp);
+
+                }
+                else {
+                    try {
+                        service.insertData();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    resp.sendRedirect(resp.encodeRedirectURL("find"));
+                    //  req.getRequestDispatcher("menu.jsp").forward(req, resp);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
     }

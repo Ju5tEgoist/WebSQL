@@ -1,6 +1,5 @@
 package com.company.controller.command;
 
-import com.company.controller.query.builder.InsertTableQueryBuilder;
 import com.company.controller.query.executor.UpdateSqlQueryExecutor;
 import com.company.model.exception.CommandExecutionException;
 
@@ -10,7 +9,7 @@ import com.company.model.exception.CommandExecutionException;
 public class Insert extends AbstractCommand {
 
     public Insert() {
-        super(null, new InsertTableQueryBuilder(), new UpdateSqlQueryExecutor());
+        super(null, null, new UpdateSqlQueryExecutor());
     }
 
     @Override

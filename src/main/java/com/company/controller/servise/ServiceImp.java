@@ -4,7 +4,7 @@ import com.company.controller.query.builder.CreateQueryBuilder;
 import com.company.controller.query.parameter.ConnectParameters;
 import com.company.controller.query.parameter.CreateParameters;
 import com.company.model.DatabaseManager;
-
+import org.apache.commons.lang3.StringUtils;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -15,6 +15,7 @@ import java.util.*;
 public class ServiceImp implements Service {
 
     private List<String> columnsName = new ArrayList<>();
+    private List<String> insertValues = new ArrayList<>();
     private int columnsNumber;
     private String tableName;
     private int i = 1;
@@ -80,14 +81,21 @@ public class ServiceImp implements Service {
     }
 
     @Override
+    public void addValue(String value) {insertValues.add("'" + value + "'");}
+
+    @Override
     public List<String> getColumnsName() {
         return columnsName;
     }
+
+
 
     @Override
     public int getCounter() {
         return i++;
     }
+
+
 
     @Override
     public void setColumnsNumber(String columnsNumber) {
@@ -114,4 +122,32 @@ public class ServiceImp implements Service {
         return tableName;
     }
 
+    @Override
+    public int getInsertColumnsNumber() throws SQLException {
+        String query = "SELECT * FROM " + tableName;
+        DatabaseManager databaseManager = new DatabaseManager();
+        ResultSet rs = databaseManager.getStatement().executeQuery(query);
+        return rs.getMetaData().getColumnCount();
+    }
+
+    @Override
+    public List getInsertColumnsName(String tableName) throws SQLException {
+        List<String> insertColumnsName = new ArrayList<>();
+        String query = "SELECT * FROM " + tableName;
+        DatabaseManager databaseManager = new DatabaseManager();
+        ResultSet rs = databaseManager.getStatement().executeQuery(query);
+        for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+            insertColumnsName.add(rs.getMetaData().getColumnName(i));
+        }
+        return insertColumnsName;
+    }
+
+    @Override
+    public void insertData() throws SQLException {
+        List<String> insertColumnsName = getInsertColumnsName(tableName);
+        String query = "INSERT INTO " + tableName + " " + "(" + StringUtils.join(insertColumnsName, ",") + ")" + " "
+                + "VALUES" + " " + "(" + StringUtils.join(insertValues, ",") + ")";
+        DatabaseManager databaseManager = new DatabaseManager();
+        databaseManager.getStatement().executeQuery(query);
+    }
 }
