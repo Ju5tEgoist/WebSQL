@@ -60,6 +60,8 @@ public class MainServlet extends HttpServlet {
             req.getRequestDispatcher("insert.jsp").forward(req, resp);
         }else if(action.equals("/delete")){
             req.getRequestDispatcher("delete.jsp").forward(req, resp);
+        }else if(action.equals("/update")){
+            req.getRequestDispatcher("update.jsp").forward(req, resp);
         } else {
             req.getRequestDispatcher("error.jsp").forward(req, resp);
         }
@@ -181,8 +183,27 @@ public class MainServlet extends HttpServlet {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }  else if (action.equals("/update")) {
+            String tableName = req.getParameter("tName");
+            service.setTableName(tableName);
+            FindProperties findProperties = new FindProperties();
+            try {
+                req.setAttribute("tabledata", findProperties.tablePresentation(tableName, ""));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            req.getRequestDispatcher("updateTable.jsp").forward(req, resp);
+        }  else if (action.equals("/updateTable")) {
+            service.setColumn(req.getParameter("column"));
+            service.setOldValue(req.getParameter("oldValue"));
+            service.setNewValue(req.getParameter("newValue"));
+            try {
+                service.updateTable();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            //req.getRequestDispatcher("updateTable.jsp").forward(req, resp);
         }
-
     }
 
 

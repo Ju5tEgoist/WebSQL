@@ -27,4 +27,12 @@ public interface Service {
     String getTableName();
 
     int getInsertColumnsNumber() throws SQLException;
+
+    void setColumn(String column);
+
+    void setOldValue(String oldValue);
+
+    void setNewValue(String newValue);
+
+    void updateTable() throws SQLException;
 }

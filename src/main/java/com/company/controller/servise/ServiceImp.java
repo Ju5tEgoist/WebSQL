@@ -1,6 +1,7 @@
 package com.company.controller.servise;
 
 import com.company.controller.query.builder.CreateQueryBuilder;
+import com.company.controller.query.builder.UpdateTableQueryBuilder;
 import com.company.controller.query.parameter.ConnectParameters;
 import com.company.controller.query.parameter.CreateParameters;
 import com.company.model.DatabaseManager;
@@ -19,6 +20,9 @@ public class ServiceImp implements Service {
     private int columnsNumber;
     private String tableName;
     private int i = 1;
+    private String column;
+    private String oldValue;
+    private String newValue;
     private List<String> commands = Arrays.asList("help", "connect", "clear", "drop", "create", "insert", "update",
             "delete", "list", "find", "exit");
 
@@ -131,6 +135,21 @@ public class ServiceImp implements Service {
     }
 
     @Override
+    public void setColumn(String column) {
+        this.column = column;
+    }
+
+    @Override
+    public void setOldValue(String oldValue) {
+        this.oldValue = "'" + oldValue + "'";
+    }
+
+    @Override
+    public void setNewValue(String newValue) {
+        this.newValue = "'" + newValue + "'" ;
+    }
+
+    @Override
     public List getInsertColumnsName(String tableName) throws SQLException {
         List<String> insertColumnsName = new ArrayList<>();
         String query = "SELECT * FROM " + tableName;
@@ -149,5 +168,11 @@ public class ServiceImp implements Service {
                 + "VALUES" + " " + "(" + StringUtils.join(insertValues, ",") + ")";
         DatabaseManager databaseManager = new DatabaseManager();
         databaseManager.getStatement().executeQuery(query);
+    }
+
+    @Override
+    public void updateTable() throws SQLException {
+        UpdateTableQueryBuilder updateTableQueryBuilder = new UpdateTableQueryBuilder();
+        updateTableQueryBuilder.build(tableName, column, newValue, oldValue);
     }
 }
