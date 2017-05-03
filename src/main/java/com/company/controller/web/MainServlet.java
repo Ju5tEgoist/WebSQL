@@ -31,7 +31,6 @@ public class MainServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = getAction(req);
-        //forwardToJSP(action, req, resp);
         if (action.startsWith("/menu") || action.equals("/")) {
             req.setAttribute("items", service.getCommandsList().keySet());
             req.getRequestDispatcher("menu.jsp").forward(req, resp);
@@ -132,10 +131,8 @@ public class MainServlet extends HttpServlet {
                     e.printStackTrace();
                 }
                 resp.sendRedirect(resp.encodeRedirectURL("menu"));
-              //  req.getRequestDispatcher("menu.jsp").forward(req, resp);
             }
-        }
-        else if (action.equals("/delete")) {
+        } else if (action.equals("/delete")) {
             String tableName = req.getParameter("tName");
             FindProperties findProperties = new FindProperties();
             try {
@@ -145,8 +142,7 @@ public class MainServlet extends HttpServlet {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }
-        else if(action.equals("/tableDelete")){
+        } else if(action.equals("/tableDelete")){
             String value = req.getParameter("value");
             String columnName = req.getParameter("columnName");
             delete.setColumnName(columnName);
@@ -178,7 +174,6 @@ public class MainServlet extends HttpServlet {
                         e.printStackTrace();
                     }
                     resp.sendRedirect(resp.encodeRedirectURL("find"));
-                    //  req.getRequestDispatcher("menu.jsp").forward(req, resp);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -202,11 +197,8 @@ public class MainServlet extends HttpServlet {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            //req.getRequestDispatcher("updateTable.jsp").forward(req, resp);
         }
     }
-
-
 
 //    private void forwardToJSP(String action, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 //        for (String command : service.getCommandsList().keySet()) {

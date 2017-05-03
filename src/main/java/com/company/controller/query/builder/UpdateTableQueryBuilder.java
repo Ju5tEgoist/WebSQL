@@ -1,12 +1,8 @@
 package com.company.controller.query.builder;
 
 import com.company.controller.query.executor.UpdateSqlQueryExecutor;
-import com.company.model.InsertUpdateDeleteColumnDefinition;
-import com.company.model.UpdateProvider;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 /**
  * Created by yulia on 23.02.17.

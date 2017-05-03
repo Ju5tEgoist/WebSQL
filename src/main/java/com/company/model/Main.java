@@ -9,6 +9,7 @@ import java.sql.SQLException;
  */
 public class Main {
 
+
     public static void main(String[] args)  {
 //        View view = new ConsoleManager();
 //        view.write("Hi, I'm Database manager! ");
