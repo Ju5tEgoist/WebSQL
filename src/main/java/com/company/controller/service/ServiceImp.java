@@ -1,4 +1,4 @@
-package com.company.controller.servise;
+package com.company.controller.service;
 
 import com.company.controller.query.builder.CreateQueryBuilder;
 import com.company.controller.query.builder.UpdateTableQueryBuilder;
@@ -6,6 +6,8 @@ import com.company.controller.query.parameter.ConnectParameters;
 import com.company.controller.query.parameter.CreateParameters;
 import com.company.model.DatabaseManager;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -13,8 +15,10 @@ import java.util.*;
 /**
  * Created by yulia on 06.04.17.
  */
+@org.springframework.stereotype.Service
 public class ServiceImp implements Service {
 
+    private final DatabaseManager databaseManager;
     private List<String> columnsName = new ArrayList<>();
     private List<String> insertValues = new ArrayList<>();
     private int columnsNumber;
@@ -32,6 +36,11 @@ public class ServiceImp implements Service {
             "find and view table in database", "");
 
     private LinkedHashMap<String, String> commandsList = new LinkedHashMap<>();
+
+    @Autowired
+    public ServiceImp(DatabaseManager databaseManager) {
+        this.databaseManager = databaseManager;
+    }
 
     @Override
     public LinkedHashMap<String, String> getCommandsList() {
@@ -58,14 +67,12 @@ public class ServiceImp implements Service {
     @Override
     public void dropTable(String tableName) throws SQLException {
        String query = "DROP TABLE " + tableName;
-       DatabaseManager databaseManager = new DatabaseManager();
        databaseManager.getStatement().executeUpdate(query);
     }
 
     @Override
     public void clearTable(String tableName) throws SQLException {
         String query = "DELETE FROM " + tableName;
-        DatabaseManager databaseManager = new DatabaseManager();
         databaseManager.getStatement().executeUpdate(query);
     }
 
@@ -75,7 +82,6 @@ public class ServiceImp implements Service {
         createParameters.setTableName(getTableName());
         createParameters.setColumnNumber(getColumnsNumber());
         CreateQueryBuilder createQueryBuilder = new CreateQueryBuilder();
-        DatabaseManager databaseManager = new DatabaseManager();
         databaseManager.getStatement().executeUpdate(createQueryBuilder.build(getColumnsName(), getColumnsNumber(), getTableName()));
     }
 
@@ -129,7 +135,6 @@ public class ServiceImp implements Service {
     @Override
     public int getInsertColumnsNumber() throws SQLException {
         String query = "SELECT * FROM " + tableName;
-        DatabaseManager databaseManager = new DatabaseManager();
         ResultSet rs = databaseManager.getStatement().executeQuery(query);
         return rs.getMetaData().getColumnCount();
     }
@@ -153,7 +158,6 @@ public class ServiceImp implements Service {
     public List getInsertColumnsName(String tableName) throws SQLException {
         List<String> insertColumnsName = new ArrayList<>();
         String query = "SELECT * FROM " + tableName;
-        DatabaseManager databaseManager = new DatabaseManager();
         ResultSet rs = databaseManager.getStatement().executeQuery(query);
         for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
             insertColumnsName.add(rs.getMetaData().getColumnName(i));
@@ -166,7 +170,6 @@ public class ServiceImp implements Service {
         List<String> insertColumnsName = getInsertColumnsName(tableName);
         String query = "INSERT INTO " + tableName + " " + "(" + StringUtils.join(insertColumnsName, ",") + ")" + " "
                 + "VALUES" + " " + "(" + StringUtils.join(insertValues, ",") + ")";
-        DatabaseManager databaseManager = new DatabaseManager();
         databaseManager.getStatement().executeQuery(query);
     }
 

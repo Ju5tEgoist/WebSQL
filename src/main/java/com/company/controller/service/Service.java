@@ -1,4 +1,6 @@
-package com.company.controller.servise;
+package com.company.controller.service;
+
+import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -8,6 +10,7 @@ import java.util.Set;
 /**
  * Created by yulia on 06.04.17.
  */
+
 public interface Service {
     Map<String, String> getCommandsList();
     Set<String> getList() throws SQLException;

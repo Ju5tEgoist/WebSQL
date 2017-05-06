@@ -1,5 +1,7 @@
 package com.company.model;
 
+import org.springframework.stereotype.Component;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -8,6 +10,8 @@ import java.sql.Statement;
 /**
  * Created by yulia on 28.09.16.
  */
+
+@Component
 public class DatabaseManager {
     public static Connection connection;
     private static Statement stmt;

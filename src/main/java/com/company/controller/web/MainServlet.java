@@ -1,12 +1,16 @@
 package com.company.controller.web;
 
 import com.company.controller.command.Delete;
-import com.company.controller.servise.Service;
-import com.company.controller.servise.ServiceImp;
+import com.company.controller.service.Service;
+import com.company.controller.service.ServiceImp;
 import com.company.model.DatabaseManager;
 import com.company.model.FindProperties;
 import com.company.model.exception.CommandExecutionException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,13 +23,15 @@ import java.sql.SQLException;
  */
 public class MainServlet extends HttpServlet {
 
+    @Autowired
     Service service;
     Delete delete;
+
     @Override
-    public void init() throws ServletException {
-        super.init();
-        service = new ServiceImp();
-        delete = new Delete();
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
+                config.getServletContext());
     }
 
     @Override
@@ -74,7 +80,7 @@ public class MainServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = getAction(req);
-        if (action.startsWith("/connect")) {
+        if (action.equals("/connect")) {
             String databaseName = req.getParameter("dbname");
             String userName = req.getParameter("username");
             String password = req.getParameter("password");
@@ -85,7 +91,7 @@ public class MainServlet extends HttpServlet {
                 req.setAttribute("message", e.getMessage());
                 req.getRequestDispatcher("error.jsp").forward(req, resp);
             }
-        } else if (action.startsWith("/find")) {
+        } else if (action.equals("/find")) {
             String tableName = req.getParameter("tName");
             String limitOffset = req.getParameter("LO");
             FindProperties findProperties = new FindProperties();
@@ -96,7 +102,7 @@ public class MainServlet extends HttpServlet {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        } else if (action.startsWith("/drop")) {
+        } else if (action.equals("/drop")) {
             String tableName = req.getParameter("tName");
             try {
                 service.dropTable(tableName);
@@ -104,7 +110,7 @@ public class MainServlet extends HttpServlet {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        } else if (action.startsWith("/clear")) {
+        } else if (action.equals("/clear")) {
             String tableName = req.getParameter("tName");
             try {
                 service.clearTable(tableName);
@@ -122,7 +128,6 @@ public class MainServlet extends HttpServlet {
             service.addName(columnName);
             if(service.getCounter() < service.getColumnsNumber()){
                 req.getRequestDispatcher("createColumns.jsp").forward(req, resp);
-
             }
             else {
                 try {

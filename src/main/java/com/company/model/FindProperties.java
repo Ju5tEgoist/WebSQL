@@ -1,20 +1,27 @@
 package com.company.model;
 
-import com.company.controller.servise.Service;
-import com.company.controller.servise.ServiceImp;
+import com.company.controller.service.Service;
+import com.company.controller.service.ServiceImp;
 import com.company.view.TablePresenter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by yulia on 04.10.16.
  */
+@Component
 public class FindProperties {
-
     TablePresenter tablePresenter = new TablePresenter();
-    Service service = new ServiceImp();
-    String selectedTableName;
+
+    @Autowired
+    Service service;
+
+    private String selectedTableName;
 
     public Map<String, List<String>> tablePresentationLO(String tableNameUser, String limitOffset) throws SQLException {
         int limit = 0;
@@ -31,7 +38,8 @@ public class FindProperties {
     }
 
     private String getSelectedTableName(String tableNameUser) throws SQLException {
-        String[] tableNames = service.getList().toArray(new String[service.getList().size()]);;
+        Set<String> list = service.getList();
+        String[] tableNames = list.toArray(new String[list.size()]);
         for (String tableName : tableNames) {
             if (tableName.equals(tableNameUser)) {
                 selectedTableName = tableName;

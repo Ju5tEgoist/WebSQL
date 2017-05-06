@@ -1,8 +1,7 @@
 package com.company.model;
 
-import com.company.model.exception.CommandExecutionException;
-
-import java.sql.SQLException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * Created by yulia on 29.10.16.
@@ -11,15 +10,8 @@ public class Main {
 
 
     public static void main(String[] args)  {
-//        View view = new ConsoleManager();
-//        view.write("Hi, I'm Database manager! ");
-//        MainController mainController = new MainController();
-//        try {
-//            mainController.perform();
-//        }
-//        catch (CommandExecutionException | SQLException e){
-//            view.write(e.toString());
-//        }
+        ApplicationContext context =
+                new ClassPathXmlApplicationContext("WEB-INF/application-context.xml");
     }
 
 
