@@ -1,12 +1,15 @@
 package com.company.view;
 
 import com.company.model.DatabaseManager;
+import org.springframework.stereotype.Component;
+
 import java.sql.*;
 import java.util.*;
 
 /**
  * Created by yulia on 02.03.17.
  */
+@Component
 public class TablePresenter {
 
 

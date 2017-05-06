@@ -27,6 +27,9 @@ public class ServiceImp implements Service {
     private String column;
     private String oldValue;
     private String newValue;
+    private CreateParameters createParameters;
+    private CreateQueryBuilder createQueryBuilder;
+    private UpdateTableQueryBuilder updateTableQueryBuilder;
     private List<String> commands = Arrays.asList("help", "connect", "clear", "drop", "create", "insert", "update",
             "delete", "list", "find", "exit");
 
@@ -38,8 +41,11 @@ public class ServiceImp implements Service {
     private LinkedHashMap<String, String> commandsList = new LinkedHashMap<>();
 
     @Autowired
-    public ServiceImp(DatabaseManager databaseManager) {
+    public ServiceImp(DatabaseManager databaseManager, CreateParameters createParameters, CreateQueryBuilder createQueryBuilder, UpdateTableQueryBuilder updateTableQueryBuilder) {
         this.databaseManager = databaseManager;
+        this.createParameters = createParameters;
+        this.createQueryBuilder = createQueryBuilder;
+        this.updateTableQueryBuilder = updateTableQueryBuilder;
     }
 
     @Override
@@ -78,10 +84,8 @@ public class ServiceImp implements Service {
 
     @Override
     public void getCreateParameters() throws SQLException {
-        CreateParameters createParameters = new CreateParameters();
         createParameters.setTableName(getTableName());
         createParameters.setColumnNumber(getColumnsNumber());
-        CreateQueryBuilder createQueryBuilder = new CreateQueryBuilder();
         databaseManager.getStatement().executeUpdate(createQueryBuilder.build(getColumnsName(), getColumnsNumber(), getTableName()));
     }
 
@@ -98,14 +102,10 @@ public class ServiceImp implements Service {
         return columnsName;
     }
 
-
-
     @Override
     public int getCounter() {
         return i++;
     }
-
-
 
     @Override
     public void setColumnsNumber(String columnsNumber) {
@@ -175,7 +175,6 @@ public class ServiceImp implements Service {
 
     @Override
     public void updateTable() throws SQLException {
-        UpdateTableQueryBuilder updateTableQueryBuilder = new UpdateTableQueryBuilder();
         updateTableQueryBuilder.build(tableName, column, newValue, oldValue);
     }
 }

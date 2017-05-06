@@ -1,7 +1,6 @@
 package com.company.model;
 
 import com.company.controller.service.Service;
-import com.company.controller.service.ServiceImp;
 import com.company.view.TablePresenter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,11 +14,12 @@ import java.util.Set;
  * Created by yulia on 04.10.16.
  */
 @Component
-public class FindProperties {
-    TablePresenter tablePresenter = new TablePresenter();
+public class FindProvider {
 
     @Autowired
-    Service service;
+    private TablePresenter tablePresenter;
+    @Autowired
+    private Service service;
 
     private String selectedTableName;
 

@@ -2,11 +2,15 @@ package com.company.controller.command;
 
 import com.company.controller.query.builder.DeleteTableQueryBuilder;
 import com.company.model.exception.CommandExecutionException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.sql.SQLException;
 
 /**
  * Created by yulia on 21.02.17.
  */
+@Component
 public class Delete implements Command {
     private String tableName;
     private String columnName;

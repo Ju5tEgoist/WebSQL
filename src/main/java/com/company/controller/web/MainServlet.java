@@ -2,14 +2,11 @@ package com.company.controller.web;
 
 import com.company.controller.command.Delete;
 import com.company.controller.service.Service;
-import com.company.controller.service.ServiceImp;
 import com.company.model.DatabaseManager;
-import com.company.model.FindProperties;
+import com.company.model.FindProvider;
 import com.company.model.exception.CommandExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -25,7 +22,11 @@ public class MainServlet extends HttpServlet {
 
     @Autowired
     Service service;
+    @Autowired
     Delete delete;
+
+    @Autowired
+    FindProvider findProvider;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -94,9 +95,8 @@ public class MainServlet extends HttpServlet {
         } else if (action.equals("/find")) {
             String tableName = req.getParameter("tName");
             String limitOffset = req.getParameter("LO");
-            FindProperties findProperties = new FindProperties();
             try {
-                req.setAttribute("tabledata", findProperties.tablePresentation(tableName, limitOffset));
+                req.setAttribute("tabledata", findProvider.tablePresentation(tableName, limitOffset));
                 req.getRequestDispatcher("table.jsp").forward(req, resp);
                 resp.sendRedirect(resp.encodeRedirectURL("menu"));
             } catch (SQLException e) {
@@ -139,10 +139,9 @@ public class MainServlet extends HttpServlet {
             }
         } else if (action.equals("/delete")) {
             String tableName = req.getParameter("tName");
-            FindProperties findProperties = new FindProperties();
             try {
                 delete.setTableName(tableName);
-                req.setAttribute("tabledata", findProperties.tablePresentation(tableName, ""));
+                req.setAttribute("tabledata", findProvider.tablePresentation(tableName, ""));
                 req.getRequestDispatcher("tableDelete.jsp").forward(req, resp);
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -170,7 +169,6 @@ public class MainServlet extends HttpServlet {
             try {
                 if(service.getCounter() < service.getInsertColumnsNumber()){
                     req.getRequestDispatcher("insertColumns.jsp").forward(req, resp);
-
                 }
                 else {
                     try {
@@ -186,9 +184,8 @@ public class MainServlet extends HttpServlet {
         }  else if (action.equals("/update")) {
             String tableName = req.getParameter("tName");
             service.setTableName(tableName);
-            FindProperties findProperties = new FindProperties();
             try {
-                req.setAttribute("tabledata", findProperties.tablePresentation(tableName, ""));
+                req.setAttribute("tabledata", findProvider.tablePresentation(tableName, ""));
             } catch (SQLException e) {
                 e.printStackTrace();
             }

@@ -2,11 +2,14 @@ package com.company.controller.query.builder;
 
 import com.company.model.CreateColumnDefinition;
 import com.company.model.CreateColumnDefinitionPropertiesProvider;
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
 /**
  * Created by yulia on 21.02.17.
  */
+@Component
 public class CreateQueryBuilder{
 
     public String build(List<String> columnsName, int columnsNumber, String tableName) {
