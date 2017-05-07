@@ -15,8 +15,6 @@ public interface Service {
     Map<String, String> getCommandsList();
     Set<String> getList() throws SQLException;
     void dropTable(String tableName) throws SQLException;
-    void clearTable(String tableName) throws SQLException;
-    void getCreateParameters() throws SQLException;
     void addName(String columnName);
     void addValue(String value);
     List<String> getColumnsName();

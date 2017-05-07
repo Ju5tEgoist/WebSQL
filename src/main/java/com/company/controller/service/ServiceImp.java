@@ -27,8 +27,6 @@ public class ServiceImp implements Service {
     private String column;
     private String oldValue;
     private String newValue;
-    private CreateParameters createParameters;
-    private CreateQueryBuilder createQueryBuilder;
     private UpdateTableQueryBuilder updateTableQueryBuilder;
     private List<String> commands = Arrays.asList("help", "connect", "clear", "drop", "create", "insert", "update",
             "delete", "list", "find", "exit");
@@ -43,8 +41,6 @@ public class ServiceImp implements Service {
     @Autowired
     public ServiceImp(DatabaseManager databaseManager, CreateParameters createParameters, CreateQueryBuilder createQueryBuilder, UpdateTableQueryBuilder updateTableQueryBuilder) {
         this.databaseManager = databaseManager;
-        this.createParameters = createParameters;
-        this.createQueryBuilder = createQueryBuilder;
         this.updateTableQueryBuilder = updateTableQueryBuilder;
     }
 
@@ -76,18 +72,8 @@ public class ServiceImp implements Service {
        databaseManager.getStatement().executeUpdate(query);
     }
 
-    @Override
-    public void clearTable(String tableName) throws SQLException {
-        String query = "DELETE FROM " + tableName;
-        databaseManager.getStatement().executeUpdate(query);
-    }
+    //TODO: delete redundant methods/classes
 
-    @Override
-    public void getCreateParameters() throws SQLException {
-        createParameters.setTableName(getTableName());
-        createParameters.setColumnNumber(getColumnsNumber());
-        databaseManager.getStatement().executeUpdate(createQueryBuilder.build(getColumnsName(), getColumnsNumber(), getTableName()));
-    }
 
     @Override
     public void addName(String columnName) {

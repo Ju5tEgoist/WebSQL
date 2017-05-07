@@ -1,6 +1,9 @@
 package com.company.controller.web;
 
-import com.company.controller.command.Delete;
+import com.company.controller.query.builder.ClearQueryBuilder;
+import com.company.controller.query.builder.CreateQueryBuilder;
+import com.company.controller.query.builder.DeleteTableQueryBuilder;
+import com.company.controller.query.executor.UpdateSqlQueryExecutor;
 import com.company.controller.service.Service;
 import com.company.model.DatabaseManager;
 import com.company.model.FindProvider;
@@ -23,10 +26,16 @@ public class MainServlet extends HttpServlet {
     @Autowired
     Service service;
     @Autowired
-    Delete delete;
-
+    DeleteTableQueryBuilder deleteTableQueryBuilder;
     @Autowired
     FindProvider findProvider;
+    @Autowired
+    UpdateSqlQueryExecutor updateSqlQueryExecutor;
+    @Autowired
+    ClearQueryBuilder clearQueryBuilder;
+    @Autowired
+    CreateQueryBuilder createQueryBuilder;
+
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -64,8 +73,8 @@ public class MainServlet extends HttpServlet {
             req.getRequestDispatcher("create.jsp").forward(req, resp);
         }else if(action.equals("/insert")){
             req.getRequestDispatcher("insert.jsp").forward(req, resp);
-        }else if(action.equals("/delete")){
-            req.getRequestDispatcher("delete.jsp").forward(req, resp);
+        }else if(action.equals("/deleteTableQueryBuilder")){
+            req.getRequestDispatcher("deleteTableQueryBuilder.jsp").forward(req, resp);
         }else if(action.equals("/update")){
             req.getRequestDispatcher("update.jsp").forward(req, resp);
         } else {
@@ -113,7 +122,7 @@ public class MainServlet extends HttpServlet {
         } else if (action.equals("/clear")) {
             String tableName = req.getParameter("tName");
             try {
-                service.clearTable(tableName);
+                updateSqlQueryExecutor.execute(clearQueryBuilder.build(tableName));
                 resp.sendRedirect(resp.encodeRedirectURL("menu"));
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -131,16 +140,16 @@ public class MainServlet extends HttpServlet {
             }
             else {
                 try {
-                    service.getCreateParameters();
+                    createQueryBuilder.setCreateParameters();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
                 resp.sendRedirect(resp.encodeRedirectURL("menu"));
             }
-        } else if (action.equals("/delete")) {
+        } else if (action.equals("/deleteTableQueryBuilder")) {
             String tableName = req.getParameter("tName");
             try {
-                delete.setTableName(tableName);
+                deleteTableQueryBuilder.setTableName(tableName);
                 req.setAttribute("tabledata", findProvider.tablePresentation(tableName, ""));
                 req.getRequestDispatcher("tableDelete.jsp").forward(req, resp);
             } catch (SQLException e) {
@@ -149,13 +158,9 @@ public class MainServlet extends HttpServlet {
         } else if(action.equals("/tableDelete")){
             String value = req.getParameter("value");
             String columnName = req.getParameter("columnName");
-            delete.setColumnName(columnName);
-            delete.setValue(value);
             try {
-                 delete.execute();
-            } catch (CommandExecutionException e) {
-                e.printStackTrace();
-            } catch (SQLException e) {
+                 updateSqlQueryExecutor.execute(deleteTableQueryBuilder.build(columnName, value));
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             resp.sendRedirect(resp.encodeRedirectURL("menu"));

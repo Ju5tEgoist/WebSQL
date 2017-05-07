@@ -1,14 +1,21 @@
 package com.company.controller.query.executor;
 
+import com.company.model.DatabaseManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.sql.SQLException;
 
 /**
  * Created by yulia on 05.03.17.
  */
-public class UpdateSqlQueryExecutor extends DatabaseManagerSqlQueryExecutor {
+@Component
+public class UpdateSqlQueryExecutor {
 
-    @Override
+    @Autowired
+   DatabaseManager databaseManager;
+
     public void execute(String query) throws SQLException {
-        getDatabaseManager().getStatement().executeUpdate(query);
+        databaseManager.getStatement().executeUpdate(query);
     }
 }
