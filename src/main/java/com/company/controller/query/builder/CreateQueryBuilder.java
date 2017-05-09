@@ -22,7 +22,7 @@ public class CreateQueryBuilder {
     @Autowired
     CreateParameters createParameters;
     @Autowired
-    com.company.controller.service.Service service;
+    Parameters parameters;
     @Autowired
     DatabaseManager databaseManager;
     @Autowired
@@ -48,8 +48,8 @@ public class CreateQueryBuilder {
     }
 
     public void setCreateParameters() throws SQLException {
-        createParameters.setTableName(service.getTableName());
-        createParameters.setColumnNumber(service.getColumnsNumber());
-        updateSqlQueryExecutor.execute(build(service.getColumnsName(), service.getColumnsNumber(), service.getTableName()));
+        createParameters.setTableName(parameters.getTableName());
+        createParameters.setColumnNumber(parameters.getColumnsNumber());
+        updateSqlQueryExecutor.execute(build(parameters.getColumnsName(), parameters.getColumnsNumber(), parameters.getTableName()));
     }
 }

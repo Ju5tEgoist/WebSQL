@@ -10,8 +10,7 @@ public class Main {
 
 
     public static void main(String[] args)  {
-        ApplicationContext context =
-                new ClassPathXmlApplicationContext("WEB-INF/application-context.xml");
+
     }
 
 
