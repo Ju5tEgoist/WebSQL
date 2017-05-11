@@ -9,29 +9,58 @@ import java.util.List;
  * Created by yulia on 05.03.17.
  */
 @Component
-public class Parameters {
-    private List<String> columnsName = new ArrayList<>();
+public class QueryParameters {
+
+    public QueryParameters() {
+    }
+
+    private List<String> columnsName;
     private int columnsNumber;
     private String tableName;
     private int i = 1;
+    private String column;
+    private String oldValue;
+    private String newValue;
+    private String value;
+
+    public List<String> getInsertValues() {
+        return insertValues;
+    }
+
+    private List<String> insertValues = new ArrayList<>();
+
+    public void addValue(String value) {insertValues.add("'" + value + "'");}
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public QueryParameters(int columnsNumber, String tableName, int i, String column, String oldValue, String newValue, String value) {
+        this.value = value;
+        this.columnsName = new ArrayList<>();
+        this.columnsNumber = columnsNumber;
+        this.tableName = tableName;
+        this.i = i;
+        this.column = column;
+        this.oldValue = oldValue;
+        this.newValue = newValue;
+    }
 
     public String getColumn() {
         return column;
     }
 
-    private String column;
 
     public String getOldValue() {
         return oldValue;
     }
 
-    private String oldValue;
-
     public String getNewValue() {
         return newValue;
     }
-
-    private String newValue;
 
     public void addName(String columnName) {
         columnsName.add(columnName);
@@ -76,5 +105,4 @@ public class Parameters {
     public void setNewValue(String newValue) {
         this.newValue = "'" + newValue + "'" ;
     }
-
 }

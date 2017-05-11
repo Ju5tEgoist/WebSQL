@@ -1,30 +1,19 @@
 package com.company.controller.query.builder;
 
 
-import java.sql.SQLException;
+import com.company.controller.query.parameter.QueryParameters;
+import org.springframework.stereotype.Component;
+
 
 /**
  * Created by yulia on 23.02.17.
  */
-public class DeleteTableQueryBuilder {
-    private String tableName;
-    private String value;
+@Component
+public class DeleteTableQueryBuilder implements QueryBuilder {
 
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
-    }
-
-    public String build(String columnName, String value) throws SQLException {
-        String sql = "DELETE FROM " + tableName + " " + "WHERE" + " " + columnName + " " + "=" + " " + "'" + value + "'";
-        return sql;
+    @Override
+    public String build(QueryParameters queryParameters){
+        return  "DELETE FROM " + queryParameters.getTableName() + " " + "WHERE" + " "
+                + queryParameters.getColumn() + " " + "=" + " " + "'" + queryParameters.getValue() + "'";
     }
 }

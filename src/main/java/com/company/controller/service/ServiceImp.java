@@ -1,9 +1,11 @@
 package com.company.controller.service;
 
-import com.company.controller.query.builder.UpdateTableQueryBuilder;
-import com.company.controller.query.parameter.ConnectParameters;
-import com.company.controller.query.parameter.Parameters;
+import com.company.controller.query.builder.*;
+import com.company.controller.query.executor.UpdateSqlQueryExecutor;
+import com.company.controller.query.parameter.ConnectQueryParameters;
+import com.company.controller.query.parameter.QueryParameters;
 import com.company.model.DatabaseManager;
+import com.company.model.FindProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,7 +19,15 @@ public class ServiceImp implements Service {
 
     private DatabaseManager databaseManager;
     private UpdateTableQueryBuilder updateTableQueryBuilder;
-    private Parameters parameters;
+    private QueryParameters queryParameters;
+    private FindProvider findProvider;
+    private UpdateSqlQueryExecutor updateSqlQueryExecutor;
+    private DropQueryBuilder dropQueryBuilder;
+    private ClearQueryBuilder clearQueryBuilder;
+    private CreateQueryBuilder createQueryBuilder;
+    private DeleteTableQueryBuilder deleteTableQueryBuilder;
+    private InsertQueryBuilder insertQueryBuilder;
+
     private List<String> commands = Arrays.asList("help", "connect", "clear", "drop", "create", "insert", "update",
             "delete", "list", "find", "exit");
 
@@ -29,10 +39,17 @@ public class ServiceImp implements Service {
     private LinkedHashMap<String, String> commandsList = new LinkedHashMap<>();
 
     @Autowired
-    public ServiceImp(DatabaseManager databaseManager, UpdateTableQueryBuilder updateTableQueryBuilder, Parameters parameters) {
+    public ServiceImp(DatabaseManager databaseManager, UpdateTableQueryBuilder updateTableQueryBuilder, QueryParameters queryParameters, FindProvider findProvider, UpdateSqlQueryExecutor updateSqlQueryExecutor, DropQueryBuilder dropQueryBuilder, ClearQueryBuilder clearQueryBuilder, CreateQueryBuilder createQueryBuilder, DeleteTableQueryBuilder deleteTableQueryBuilder, InsertQueryBuilder insertQueryBuilder) {
         this.databaseManager = databaseManager;
         this.updateTableQueryBuilder = updateTableQueryBuilder;
-        this.parameters = parameters;
+        this.queryParameters = queryParameters;
+        this.findProvider = findProvider;
+        this.updateSqlQueryExecutor = updateSqlQueryExecutor;
+        this.dropQueryBuilder = dropQueryBuilder;
+        this.clearQueryBuilder = clearQueryBuilder;
+        this.createQueryBuilder = createQueryBuilder;
+        this.deleteTableQueryBuilder = deleteTableQueryBuilder;
+        this.insertQueryBuilder = insertQueryBuilder;
     }
 
     @Override
@@ -48,7 +65,7 @@ public class ServiceImp implements Service {
     @Override
     public Set<String> getList() throws SQLException {
         Set<String> list = new HashSet<>();
-        ResultSet resultSet = DatabaseManager.getConnection().getMetaData().getTables(new ConnectParameters()
+        ResultSet resultSet = DatabaseManager.getConnection().getMetaData().getTables(new ConnectQueryParameters()
                 .getDatabase(), "public", "%", null);
         int databaseIndex = 3;
         while (resultSet.next()) {
@@ -57,10 +74,55 @@ public class ServiceImp implements Service {
         return list;
     }
 
-
     @Override
     public String updateTable() throws SQLException {
-        return updateTableQueryBuilder.build(parameters.getTableName(),
-                parameters.getColumn(), parameters.getNewValue(), parameters.getOldValue());
+        return updateTableQueryBuilder.build(queryParameters);
+    }
+
+    @Override
+    public Map<String, List<String>> tablePresenter(String tableName, String limitOffset) throws SQLException {
+        return findProvider.tablePresentation(tableName, limitOffset);
+    }
+
+    @Override
+    public void dropTable() throws SQLException {
+        execute(dropQueryBuilder.build(queryParameters));
+    }
+
+    @Override
+    public void clearTable() throws SQLException {
+        execute(clearQueryBuilder.build(queryParameters));
+    }
+
+    @Override
+    public void createTable() throws SQLException {
+        execute(createQueryBuilder.build(queryParameters));
+    }
+
+    @Override
+    public void delete() throws SQLException {
+        execute(deleteTableQueryBuilder.build(queryParameters));
+    }
+
+    @Override
+    public void insert() throws SQLException {
+        execute(insertQueryBuilder.build(queryParameters));
+    }
+
+    @Override
+    public void execute(String query) throws SQLException {
+       updateSqlQueryExecutor.execute(query);
+    }
+
+    @Override
+    public void update() throws SQLException {
+        execute(updateTable());
+    }
+
+    @Override
+    public int getInsertColumnsNumber(QueryParameters queryParameters) throws SQLException {
+        String query = "SELECT * FROM " + queryParameters.getTableName();
+        ResultSet rs = databaseManager.getStatement().executeQuery(query);
+        return rs.getMetaData().getColumnCount();
     }
 }

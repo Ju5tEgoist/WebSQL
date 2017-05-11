@@ -1,11 +1,8 @@
 package com.company.controller.web;
 
-import com.company.controller.query.builder.*;
-import com.company.controller.query.executor.UpdateSqlQueryExecutor;
-import com.company.controller.query.parameter.Parameters;
+import com.company.controller.query.parameter.QueryParameters;
 import com.company.controller.service.Service;
 import com.company.model.DatabaseManager;
-import com.company.model.FindProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import javax.servlet.ServletConfig;
@@ -15,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,31 +20,13 @@ import java.util.List;
  */
 public class MainServlet extends HttpServlet {
 
-    Service service;
-    DeleteTableQueryBuilder deleteTableQueryBuilder;
-    FindProvider findProvider;
-    UpdateSqlQueryExecutor updateSqlQueryExecutor;
-    ClearQueryBuilder clearQueryBuilder;
-    CreateQueryBuilder createQueryBuilder;
-    DropQueryBuilder dropQueryBuilder;
-    InsertQueryBuilder insertQueryBuilder;
-    Parameters parameters;
-
     @Autowired
-    public MainServlet(Service service, DeleteTableQueryBuilder deleteTableQueryBuilder, FindProvider findProvider, UpdateSqlQueryExecutor updateSqlQueryExecutor, ClearQueryBuilder clearQueryBuilder, CreateQueryBuilder createQueryBuilder, DropQueryBuilder dropQueryBuilder, InsertQueryBuilder insertQueryBuilder, Parameters parameters) {
-        this.service = service;
-        this.deleteTableQueryBuilder = deleteTableQueryBuilder;
-        this.findProvider = findProvider;
-        this.updateSqlQueryExecutor = updateSqlQueryExecutor;
-        this.clearQueryBuilder = clearQueryBuilder;
-        this.createQueryBuilder = createQueryBuilder;
-        this.dropQueryBuilder = dropQueryBuilder;
-        this.insertQueryBuilder = insertQueryBuilder;
-        this.parameters = parameters;
-    }
+    Service service;
+    QueryParameters queryParameters;
 
-    private List<String> commands = Arrays.asList("/menu", "/connect", "/find", "/drop", "/clear", "/create",
-            "/createColumns", "/delete", "/tableDelete", "/insert", "/insertColumns", "/update", "/updateTable" );
+
+//    private List<String> commands = Arrays.asList("/menu", "/connect", "/find", "/drop", "/clear", "/create",
+//            "/createColumns", "/delete", "/tableDelete", "/insert", "/insertColumns", "/update", "/updateTable" );
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -118,7 +96,7 @@ public class MainServlet extends HttpServlet {
             String tableName = req.getParameter("tName");
             String limitOffset = req.getParameter("LO");
             try {
-                req.setAttribute("tabledata", findProvider.tablePresentation(tableName, limitOffset));
+                req.setAttribute("tabledata", service.tablePresenter(tableName, limitOffset));
                 req.getRequestDispatcher("table.jsp").forward(req, resp);
                 resp.sendRedirect(resp.encodeRedirectURL("menu"));
             } catch (SQLException e) {
@@ -126,34 +104,37 @@ public class MainServlet extends HttpServlet {
             }
         } else if (action.equals("/drop")) {
             String tableName = req.getParameter("tName");
+            queryParameters.setTableName(tableName);
             try {
-                updateSqlQueryExecutor.execute(dropQueryBuilder.build(tableName));
+                service.dropTable();
                 resp.sendRedirect(resp.encodeRedirectURL("menu"));
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         } else if (action.equals("/clear")) {
             String tableName = req.getParameter("tName");
+            queryParameters.setTableName(tableName);
             try {
-                updateSqlQueryExecutor.execute(clearQueryBuilder.build(tableName));
+                service.clearTable();
                 resp.sendRedirect(resp.encodeRedirectURL("menu"));
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         } else if (action.equals("/create")) {
-            parameters.setTableName(req.getParameter("tName"));
-            parameters.setColumnsNumber(req.getParameter("cNumber"));
+            queryParameters.setTableName(req.getParameter("tName"));
+            queryParameters.setColumnsNumber(req.getParameter("cNumber"));
             req.getRequestDispatcher("createColumns.jsp").forward(req, resp);
-            parameters.setCounter(1);
+            queryParameters.setCounter(1);
         } else if (action.equals("/createColumns")) {
             String columnName = req.getParameter("cName");
-            parameters.addName(columnName);
-            if(parameters.getCounter() < parameters.getColumnsNumber()){
+            queryParameters.setColumn(columnName);
+            queryParameters.addName(columnName);
+            if(queryParameters.getCounter() < queryParameters.getColumnsNumber()){
                 req.getRequestDispatcher("createColumns.jsp").forward(req, resp);
             }
             else {
                 try {
-                    createQueryBuilder.setCreateParameters();
+                    service.createTable();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -162,35 +143,35 @@ public class MainServlet extends HttpServlet {
         } else if (action.equals("/delete")) {
             String tableName = req.getParameter("tName");
             try {
-                deleteTableQueryBuilder.setTableName(tableName);
-                req.setAttribute("tabledata", findProvider.tablePresentation(tableName, ""));
+                queryParameters.setTableName(tableName);
+                req.setAttribute("tabledata", service.tablePresenter(tableName, ""));
                 req.getRequestDispatcher("tableDelete.jsp").forward(req, resp);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         } else if(action.equals("/tableDelete")){
-            String value = req.getParameter("value");
-            String columnName = req.getParameter("columnName");
+            queryParameters.setValue(req.getParameter("value"));
+            queryParameters.setColumn(req.getParameter("columnName"));
             try {
-                 updateSqlQueryExecutor.execute(deleteTableQueryBuilder.build(columnName, value));
+                service.delete();
             } catch (Exception e) {
                 e.printStackTrace();
             }
             resp.sendRedirect(resp.encodeRedirectURL("menu"));
         } else if (action.equals("/insert")) {
-            insertQueryBuilder.setTableName(req.getParameter("tName"));
+            queryParameters.setTableName(req.getParameter("tName"));
             req.getRequestDispatcher("insertColumns.jsp").forward(req, resp);
-            parameters.setCounter(1);
+            queryParameters.setCounter(1);
         } else if (action.equals("/insertColumns")) {
             String value = req.getParameter("value");
-           insertQueryBuilder.addValue(value);
+           queryParameters.addValue(value);
             try {
-                if(parameters.getCounter() < insertQueryBuilder.getInsertColumnsNumber()){
+                if(queryParameters.getCounter() < service.getInsertColumnsNumber(queryParameters)){
                     req.getRequestDispatcher("insertColumns.jsp").forward(req, resp);
                 }
                 else {
                     try {
-                        updateSqlQueryExecutor.execute(insertQueryBuilder.build());
+                        service.insert();
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
@@ -201,19 +182,19 @@ public class MainServlet extends HttpServlet {
             }
         }  else if (action.equals("/update")) {
             String tableName = req.getParameter("tName");
-            parameters.setTableName(tableName);
+            queryParameters.setTableName(tableName);
             try {
-                req.setAttribute("tabledata", findProvider.tablePresentation(tableName, ""));
+                req.setAttribute("tabledata", service.tablePresenter(tableName, ""));
             } catch (SQLException e) {
                 e.printStackTrace();
             }
             req.getRequestDispatcher("updateTable.jsp").forward(req, resp);
         }  else if (action.equals("/updateTable")) {
-            parameters.setColumn(req.getParameter("column"));
-            parameters.setOldValue(req.getParameter("oldValue"));
-            parameters.setNewValue(req.getParameter("newValue"));
+            queryParameters.setColumn(req.getParameter("column"));
+            queryParameters.setOldValue(req.getParameter("oldValue"));
+            queryParameters.setNewValue(req.getParameter("newValue"));
             try {
-                updateSqlQueryExecutor.execute(service.updateTable());
+                service.update();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

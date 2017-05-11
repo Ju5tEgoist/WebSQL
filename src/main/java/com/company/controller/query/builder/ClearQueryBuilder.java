@@ -1,13 +1,16 @@
 package com.company.controller.query.builder;
 
+import com.company.controller.query.parameter.QueryParameters;
 import org.springframework.stereotype.Component;
 
 /**
  * Created by yulia on 05.03.17.
  */
 @Component
-public class ClearQueryBuilder {
-    public String build(String tableName) {
-        return "DELETE FROM " + tableName;
+public class ClearQueryBuilder implements QueryBuilder{
+
+    @Override
+    public String build(QueryParameters queryParameters) {
+        return "DELETE FROM " + queryParameters.getTableName();
     }
 }

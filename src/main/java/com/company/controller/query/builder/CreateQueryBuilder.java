@@ -1,14 +1,12 @@
 package com.company.controller.query.builder;
 
 import com.company.controller.query.executor.UpdateSqlQueryExecutor;
-import com.company.controller.query.parameter.CreateParameters;
-import com.company.controller.query.parameter.Parameters;
+import com.company.controller.query.parameter.QueryParameters;
 import com.company.model.CreateColumnDefinition;
 import com.company.model.CreateColumnDefinitionPropertiesProvider;
 import com.company.model.DatabaseManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -17,24 +15,23 @@ import java.util.List;
  * Created by yulia on 21.02.17.
  */
 @Component
-public class CreateQueryBuilder {
+public class CreateQueryBuilder implements QueryBuilder {
 
     @Autowired
-    CreateParameters createParameters;
-    @Autowired
-    Parameters parameters;
+    QueryParameters queryParameters;
     @Autowired
     DatabaseManager databaseManager;
     @Autowired
     UpdateSqlQueryExecutor updateSqlQueryExecutor;
 
-    public String build(List<String> columnsName, int columnsNumber, String tableName) {
+    @Override
+    public String build(QueryParameters queryParameters) {
         String properties = "";
         CreateColumnDefinitionPropertiesProvider columnDefinitionProvider = new CreateColumnDefinitionPropertiesProvider();
-        List<CreateColumnDefinition> columnDefinition = columnDefinitionProvider.getProperties(columnsNumber,columnsName);
+        List<CreateColumnDefinition> columnDefinition = columnDefinitionProvider.getProperties(queryParameters.getColumnsNumber(),queryParameters.getColumnsName());
         properties = getQueryProperties(properties, columnDefinition);
-        System.out.println("CREATE TABLE " + tableName + "(" + properties + ")");
-        return "CREATE TABLE " + tableName + "(" + properties + ")";
+        System.out.println("CREATE TABLE " + queryParameters.getTableName() + "(" + properties + ")");
+        return "CREATE TABLE " + queryParameters.getTableName() + "(" + properties + ")";
     }
 
     private String getQueryProperties(String properties, List<CreateColumnDefinition> columnDefinition) {
@@ -45,11 +42,5 @@ public class CreateQueryBuilder {
                             + " " + columnDefinition.get(i).getDefaultValue();
         }
         return properties;
-    }
-
-    public void setCreateParameters() throws SQLException {
-        createParameters.setTableName(parameters.getTableName());
-        createParameters.setColumnNumber(parameters.getColumnsNumber());
-        updateSqlQueryExecutor.execute(build(parameters.getColumnsName(), parameters.getColumnsNumber(), parameters.getTableName()));
     }
 }

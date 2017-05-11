@@ -3,7 +3,7 @@ package com.company.controller.query.parameter;
 /**
  * Created by yulia on 05.03.17.
  */
-public class ConnectParameters extends Parameters {
+public class ConnectQueryParameters extends QueryParameters {
     private String database;
     private String userName;
     private String password;
