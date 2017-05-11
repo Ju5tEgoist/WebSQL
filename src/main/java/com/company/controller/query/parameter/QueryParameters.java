@@ -1,113 +1,46 @@
 package com.company.controller.query.parameter;
 
-import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by yulia on 05.03.17.
+ * Created by yulia on 11.05.17.
  */
-@Component
-public class QueryParameters {
+public interface QueryParameters {
+    List<String> getInsertValues();
 
-    public QueryParameters() {
-    }
+    void addValue(String value);
 
-    private List<String> columnsName;
-    private int columnsNumber;
-    private String tableName;
-    private int i = 1;
-    private String column;
-    private String oldValue;
-    private String newValue;
-    private String value;
-    private String database;
+    String getValue();
 
-    public List<String> getInsertValues() {
-        return insertValues;
-    }
+    void setValue(String value);
 
-    private List<String> insertValues = new ArrayList<>();
+    String getDatabase();
 
-    public void addValue(String value) {insertValues.add("'" + value + "'");}
-    public String getValue() {
-        return value;
-    }
+    String getColumn();
 
-    public void setValue(String value) {
-        this.value = value;
-    }
-    public String getDatabase() {
-        return database;
-    }
+    String getOldValue();
 
-    public QueryParameters(int columnsNumber, String tableName, int i, String column, String oldValue, String newValue, String value, String database) {
-        this.value = value;
-        this.database = database;
-        this.columnsName = new ArrayList<>();
-        this.columnsNumber = columnsNumber;
-        this.tableName = tableName;
-        this.i = i;
-        this.column = column;
-        this.oldValue = oldValue;
-        this.newValue = newValue;
-    }
+    String getNewValue();
 
-    public String getColumn() {
-        return column;
-    }
+    void addName(String columnName);
 
+    List<String> getColumnsName();
 
-    public String getOldValue() {
-        return oldValue;
-    }
+    int getCounter();
 
-    public String getNewValue() {
-        return newValue;
-    }
+    void setColumnsNumber(String columnsNumber);
 
-    public void addName(String columnName) {
-        columnsName.add(columnName);
-    }
+    int getColumnsNumber();
 
-    public List<String> getColumnsName() {
-        return columnsName;
-    }
+    void setCounter(int counter);
 
-    public int getCounter() {
-        return i++;
-    }
+    void setTableName(String tName);
 
-    public void setColumnsNumber(String columnsNumber) {
-        this.columnsNumber = Integer.parseInt(columnsNumber);
-    }
+    String getTableName();
 
-    public int getColumnsNumber() {
-        return columnsNumber;
-    }
+    void setColumn(String column);
 
-    public void setCounter(int counter) {
-        this.i = counter;
-    }
+    void setOldValue(String oldValue);
 
-    public void setTableName(String tName) {
-        this.tableName = tName;
-    }
-
-    public String getTableName() {
-        return tableName;
-    }
-
-    public void setColumn(String column) {
-        this.column = column;
-    }
-
-    public void setOldValue(String oldValue) {
-        this.oldValue = "'" + oldValue + "'";
-    }
-
-    public void setNewValue(String newValue) {
-        this.newValue = "'" + newValue + "'" ;
-    }
+    void setNewValue(String newValue);
 }

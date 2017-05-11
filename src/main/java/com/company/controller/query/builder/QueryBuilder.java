@@ -1,7 +1,6 @@
 package com.company.controller.query.builder;
 
 import com.company.controller.query.parameter.QueryParameters;
-
 import java.sql.SQLException;
 
 /**

@@ -1,7 +1,6 @@
 package com.company.controller.service;
 
 import com.company.controller.query.parameter.QueryParameters;
-
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;

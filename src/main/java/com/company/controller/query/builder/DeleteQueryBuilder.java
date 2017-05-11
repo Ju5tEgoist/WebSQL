@@ -2,6 +2,7 @@ package com.company.controller.query.builder;
 
 
 import com.company.controller.query.parameter.QueryParameters;
+import com.company.controller.query.parameter.QueryParametersImpl;
 import org.springframework.stereotype.Component;
 
 
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Component;
  * Created by yulia on 23.02.17.
  */
 @Component
-public class DeleteTableQueryBuilder implements QueryBuilder {
+public class DeleteQueryBuilder implements QueryBuilder {
 
     @Override
     public String build(QueryParameters queryParameters){

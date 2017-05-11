@@ -12,8 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by yulia on 03.04.17.
@@ -200,13 +198,4 @@ public class MainServlet extends HttpServlet {
             }
         }
     }
-
-//    private void forwardToJSP(String action, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        for (String command : service.getCommandsList().keySet()) {
-//            if (action.startsWith("/" + command)) {
-//                req.setAttribute("items", service.getCommandsList());
-//                req.getRequestDispatcher( command +".jsp").forward(req, resp);
-//            }
-//        }
-//    }
 }

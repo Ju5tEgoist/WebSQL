@@ -1,6 +1,7 @@
 package com.company.view;
 
 import com.company.model.DatabaseManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
@@ -12,9 +13,11 @@ import java.util.*;
 @Component
 public class TablePresenter {
 
+    @Autowired
+    DatabaseManager databaseManager;
 
     public Map<String, List<String>> getTableData(String selectedTableName, int limit, int offset) throws SQLException {
-        Connection connection = DatabaseManager.getConnection();
+        Connection connection = databaseManager.getConnection();
         PreparedStatement ps;
         if(limit != 0 && offset != 0){
             String s = "SELECT * FROM " + selectedTableName + " " + "LIMIT " + limit + " " +  "OFFSET" + " " + offset;

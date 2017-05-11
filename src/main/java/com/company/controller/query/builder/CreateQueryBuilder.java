@@ -2,13 +2,13 @@ package com.company.controller.query.builder;
 
 import com.company.controller.query.executor.UpdateSqlQueryExecutor;
 import com.company.controller.query.parameter.QueryParameters;
+import com.company.controller.query.parameter.QueryParametersImpl;
 import com.company.model.CreateColumnDefinition;
 import com.company.model.CreateColumnDefinitionPropertiesProvider;
 import com.company.model.DatabaseManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -28,7 +28,7 @@ public class CreateQueryBuilder implements QueryBuilder {
     public String build(QueryParameters queryParameters) {
         String properties = "";
         CreateColumnDefinitionPropertiesProvider columnDefinitionProvider = new CreateColumnDefinitionPropertiesProvider();
-        List<CreateColumnDefinition> columnDefinition = columnDefinitionProvider.getProperties(queryParameters.getColumnsNumber(),queryParameters.getColumnsName());
+        List<CreateColumnDefinition> columnDefinition = columnDefinitionProvider.getProperties(queryParameters.getColumnsNumber(), queryParameters.getColumnsName());
         properties = getQueryProperties(properties, columnDefinition);
         System.out.println("CREATE TABLE " + queryParameters.getTableName() + "(" + properties + ")");
         return "CREATE TABLE " + queryParameters.getTableName() + "(" + properties + ")";

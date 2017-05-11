@@ -24,7 +24,7 @@ public class ServiceImp implements Service {
     private DropQueryBuilder dropQueryBuilder;
     private ClearQueryBuilder clearQueryBuilder;
     private CreateQueryBuilder createQueryBuilder;
-    private DeleteTableQueryBuilder deleteTableQueryBuilder;
+    private DeleteQueryBuilder deleteQueryBuilder;
     private InsertQueryBuilder insertQueryBuilder;
 
     private List<String> commands = Arrays.asList("help", "connect", "clear", "drop", "create", "insert", "update",
@@ -38,7 +38,7 @@ public class ServiceImp implements Service {
     private LinkedHashMap<String, String> commandsList = new LinkedHashMap<>();
 
     @Autowired
-    public ServiceImp(DatabaseManager databaseManager, UpdateTableQueryBuilder updateTableQueryBuilder, QueryParameters queryParameters, FindProvider findProvider, UpdateSqlQueryExecutor updateSqlQueryExecutor, DropQueryBuilder dropQueryBuilder, ClearQueryBuilder clearQueryBuilder, CreateQueryBuilder createQueryBuilder, DeleteTableQueryBuilder deleteTableQueryBuilder, InsertQueryBuilder insertQueryBuilder) {
+    public ServiceImp(DatabaseManager databaseManager, UpdateTableQueryBuilder updateTableQueryBuilder, QueryParameters queryParameters, FindProvider findProvider, UpdateSqlQueryExecutor updateSqlQueryExecutor, DropQueryBuilder dropQueryBuilder, ClearQueryBuilder clearQueryBuilder, CreateQueryBuilder createQueryBuilder, DeleteQueryBuilder deleteQueryBuilder, InsertQueryBuilder insertQueryBuilder) {
         this.databaseManager = databaseManager;
         this.updateTableQueryBuilder = updateTableQueryBuilder;
         this.queryParameters = queryParameters;
@@ -47,7 +47,7 @@ public class ServiceImp implements Service {
         this.dropQueryBuilder = dropQueryBuilder;
         this.clearQueryBuilder = clearQueryBuilder;
         this.createQueryBuilder = createQueryBuilder;
-        this.deleteTableQueryBuilder = deleteTableQueryBuilder;
+        this.deleteQueryBuilder = deleteQueryBuilder;
         this.insertQueryBuilder = insertQueryBuilder;
     }
 
@@ -100,7 +100,7 @@ public class ServiceImp implements Service {
 
     @Override
     public void delete() throws SQLException {
-        execute(deleteTableQueryBuilder.build(queryParameters));
+        execute(deleteQueryBuilder.build(queryParameters));
     }
 
     @Override

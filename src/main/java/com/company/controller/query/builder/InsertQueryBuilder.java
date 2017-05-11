@@ -1,6 +1,7 @@
 package com.company.controller.query.builder;
 
 import com.company.controller.query.parameter.QueryParameters;
+import com.company.controller.query.parameter.QueryParametersImpl;
 import com.company.model.DatabaseManager;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
