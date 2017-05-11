@@ -13,7 +13,7 @@ import java.sql.Statement;
 
 @Component
 public class DatabaseManager {
-    public static Connection connection;
+    private static Connection connection;
     private static Statement stmt;
 
     public static Connection connect(String database, String user, String password) throws SQLException {

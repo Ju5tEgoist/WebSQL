@@ -22,6 +22,7 @@ public class QueryParameters {
     private String oldValue;
     private String newValue;
     private String value;
+    private String database;
 
     public List<String> getInsertValues() {
         return insertValues;
@@ -37,9 +38,13 @@ public class QueryParameters {
     public void setValue(String value) {
         this.value = value;
     }
+    public String getDatabase() {
+        return database;
+    }
 
-    public QueryParameters(int columnsNumber, String tableName, int i, String column, String oldValue, String newValue, String value) {
+    public QueryParameters(int columnsNumber, String tableName, int i, String column, String oldValue, String newValue, String value, String database) {
         this.value = value;
+        this.database = database;
         this.columnsName = new ArrayList<>();
         this.columnsNumber = columnsNumber;
         this.tableName = tableName;

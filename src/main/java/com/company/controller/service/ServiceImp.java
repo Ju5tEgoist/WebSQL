@@ -2,7 +2,6 @@ package com.company.controller.service;
 
 import com.company.controller.query.builder.*;
 import com.company.controller.query.executor.UpdateSqlQueryExecutor;
-import com.company.controller.query.parameter.ConnectQueryParameters;
 import com.company.controller.query.parameter.QueryParameters;
 import com.company.model.DatabaseManager;
 import com.company.model.FindProvider;
@@ -65,7 +64,7 @@ public class ServiceImp implements Service {
     @Override
     public Set<String> getList() throws SQLException {
         Set<String> list = new HashSet<>();
-        ResultSet resultSet = DatabaseManager.getConnection().getMetaData().getTables(new ConnectQueryParameters()
+        ResultSet resultSet = databaseManager.getConnection().getMetaData().getTables(queryParameters
                 .getDatabase(), "public", "%", null);
         int databaseIndex = 3;
         while (resultSet.next()) {
