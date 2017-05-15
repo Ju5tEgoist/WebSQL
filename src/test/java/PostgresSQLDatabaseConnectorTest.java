@@ -18,6 +18,8 @@ import static org.junit.Assert.*;
 @ContextConfiguration(locations = "classpath:test-application-context.xml")
 public class PostgresSQLDatabaseConnectorTest {
 
+    //Test for specific database!!!
+
     @Autowired
     private SQLDatabaseConnector sqlDatabaseConnector;
     private String database;

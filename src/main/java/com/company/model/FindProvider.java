@@ -23,18 +23,24 @@ public class FindProvider {
 
     private String selectedTableName;
 
-    public Map<String, List<String>> tablePresentationLO(String tableNameUser, String limitOffset) throws SQLException {
+    public Map<String, List<String>> tablePresentationLO(String tableNameUser, String limitOffset)  {
         int limit = 0;
         int offset = 0;
         String limitString;
         String offsetString;
+        Map<String, List<String>> tableData = null;
         String[] partsLO = limitOffset.split("/");
         limitString = partsLO[0];
         offsetString = partsLO[1];
         limit = Integer.parseInt(limitString);
         offset = Integer.parseInt(offsetString);
-        getSelectedTableName(tableNameUser);
-        return tablePresenter.getTableData(selectedTableName, limit, offset);
+        try {
+            getSelectedTableName(tableNameUser);
+            tableData =  tablePresenter.getTableData(selectedTableName, limit, offset);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tableData;
     }
 
     private String getSelectedTableName(String tableNameUser) throws SQLException {
@@ -53,11 +59,17 @@ public class FindProvider {
     }
 
 
-    public Map<String, List<String>> tablePresentation(String tableNameUser, String limitOffset) throws SQLException {
+    public Map<String, List<String>> tablePresentation(String tableNameUser, String limitOffset)  {
         if (!limitOffset.equals("")) {
             tablePresentationLO(tableNameUser, limitOffset);
         }
+        Map<String, List<String>> tableData = null;
+        try {
             getSelectedTableName(tableNameUser);
-            return tablePresenter.getTableData(selectedTableName, 0, 0);
+            tableData = tablePresenter.getTableData(selectedTableName, 0, 0);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tableData;
     }
 }
