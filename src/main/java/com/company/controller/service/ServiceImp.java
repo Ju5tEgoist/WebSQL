@@ -3,8 +3,9 @@ package com.company.controller.service;
 import com.company.controller.query.builder.*;
 import com.company.controller.query.executor.UpdateSqlQueryExecutor;
 import com.company.controller.query.parameter.QueryParameters;
-import com.company.model.DatabaseManager;
+import com.company.model.PostgresSQLDatabaseConnector;
 import com.company.model.FindProvider;
+import com.company.model.SQLDatabaseConnector;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,7 +17,7 @@ import java.util.*;
 @org.springframework.stereotype.Service
 public class ServiceImp implements Service {
 
-    private DatabaseManager databaseManager;
+    private SQLDatabaseConnector sqlDatabaseConnector;
     private UpdateTableQueryBuilder updateTableQueryBuilder;
     private QueryParameters queryParameters;
     private FindProvider findProvider;
@@ -38,8 +39,8 @@ public class ServiceImp implements Service {
     private LinkedHashMap<String, String> commandsList = new LinkedHashMap<>();
 
     @Autowired
-    public ServiceImp(DatabaseManager databaseManager, UpdateTableQueryBuilder updateTableQueryBuilder, QueryParameters queryParameters, FindProvider findProvider, UpdateSqlQueryExecutor updateSqlQueryExecutor, DropQueryBuilder dropQueryBuilder, ClearQueryBuilder clearQueryBuilder, CreateQueryBuilder createQueryBuilder, DeleteQueryBuilder deleteQueryBuilder, InsertQueryBuilder insertQueryBuilder) {
-        this.databaseManager = databaseManager;
+    public ServiceImp(SQLDatabaseConnector sqlDatabaseConnector, UpdateTableQueryBuilder updateTableQueryBuilder, QueryParameters queryParameters, FindProvider findProvider, UpdateSqlQueryExecutor updateSqlQueryExecutor, DropQueryBuilder dropQueryBuilder, ClearQueryBuilder clearQueryBuilder, CreateQueryBuilder createQueryBuilder, DeleteQueryBuilder deleteQueryBuilder, InsertQueryBuilder insertQueryBuilder) {
+        this.sqlDatabaseConnector = sqlDatabaseConnector;
         this.updateTableQueryBuilder = updateTableQueryBuilder;
         this.queryParameters = queryParameters;
         this.findProvider = findProvider;
@@ -64,7 +65,7 @@ public class ServiceImp implements Service {
     @Override
     public Set<String> getList() throws SQLException {
         Set<String> list = new HashSet<>();
-        ResultSet resultSet = databaseManager.getConnection().getMetaData().getTables(queryParameters
+        ResultSet resultSet = sqlDatabaseConnector.getConnection().getMetaData().getTables(queryParameters
                 .getDatabase(), "public", "%", null);
         int databaseIndex = 3;
         while (resultSet.next()) {
@@ -121,7 +122,13 @@ public class ServiceImp implements Service {
     @Override
     public int getInsertColumnsNumber(QueryParameters queryParameters) throws SQLException {
         String query = "SELECT * FROM " + queryParameters.getTableName();
-        ResultSet rs = databaseManager.getStatement().executeQuery(query);
+        ResultSet rs = sqlDatabaseConnector.getConnection().createStatement().executeQuery(query);
         return rs.getMetaData().getColumnCount();
+    }
+
+    @Override
+    public void connect(){
+        sqlDatabaseConnector.connect(queryParameters.getDatabase(), queryParameters.getUserName(),
+                queryParameters.getPassword());
     }
 }

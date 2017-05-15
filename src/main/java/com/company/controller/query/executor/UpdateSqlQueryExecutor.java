@@ -1,6 +1,6 @@
 package com.company.controller.query.executor;
 
-import com.company.model.DatabaseManager;
+import com.company.model.SQLDatabaseConnector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,9 +13,9 @@ import java.sql.SQLException;
 public class UpdateSqlQueryExecutor {
 
     @Autowired
-   DatabaseManager databaseManager;
+    SQLDatabaseConnector sqlDatabaseConnector;
 
     public void execute(String query) throws SQLException {
-        databaseManager.getStatement().executeUpdate(query);
+        sqlDatabaseConnector.getConnection().createStatement().executeUpdate(query);
     }
 }

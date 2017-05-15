@@ -35,4 +35,6 @@ public interface Service {
     void update() throws SQLException;
 
     int getInsertColumnsNumber(QueryParameters queryParameters) throws SQLException;
+
+    void connect();
 }

@@ -11,8 +11,7 @@ import java.util.List;
 @Component
 public class QueryParametersImpl implements QueryParameters {
 
-    public QueryParametersImpl() {
-    }
+    public QueryParametersImpl() {}
 
     private List<String> columnsName;
     private int columnsNumber;
@@ -23,6 +22,33 @@ public class QueryParametersImpl implements QueryParameters {
     private String newValue;
     private String value;
     private String database;
+    private String userName;
+    private String password ;
+
+    @Override
+    public String getUserName() {
+        return userName;
+    }
+
+    @Override
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public void setDatabase(String database) {
+        this.database = database;
+    }
 
     @Override
     public List<String> getInsertValues() {
@@ -45,9 +71,11 @@ public class QueryParametersImpl implements QueryParameters {
         return database;
     }
 
-    public QueryParametersImpl(int columnsNumber, String tableName, int i, String column, String oldValue, String newValue, String value, String database) {
+    public QueryParametersImpl(int columnsNumber, String tableName, int i, String column, String oldValue, String newValue, String value, String database, String userName, String password) {
         this.value = value;
         this.database = database;
+        this.userName = userName;
+        this.password = password;
         this.columnsName = new ArrayList<>();
         this.columnsNumber = columnsNumber;
         this.tableName = tableName;

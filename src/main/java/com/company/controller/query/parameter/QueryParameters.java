@@ -6,6 +6,16 @@ import java.util.List;
  * Created by yulia on 11.05.17.
  */
 public interface QueryParameters {
+    String getUserName();
+
+    void setUserName(String userName);
+
+    String getPassword();
+
+    void setPassword(String password);
+
+    void setDatabase(String database);
+
     List<String> getInsertValues();
 
     void addValue(String value);

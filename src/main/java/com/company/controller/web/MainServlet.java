@@ -2,7 +2,7 @@ package com.company.controller.web;
 
 import com.company.controller.query.parameter.QueryParameters;
 import com.company.controller.service.Service;
-import com.company.model.DatabaseManager;
+import com.company.model.PostgresSQLDatabaseConnector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import javax.servlet.ServletConfig;
@@ -22,9 +22,6 @@ public class MainServlet extends HttpServlet {
     Service service;
     QueryParameters queryParameters;
 
-
-//    private List<String> commands = Arrays.asList("/menu", "/connect", "/find", "/drop", "/clear", "/create",
-//            "/createColumns", "/delete", "/tableDelete", "/insert", "/insertColumns", "/update", "/updateTable" );
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -80,11 +77,11 @@ public class MainServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = getAction(req);
         if (action.equals("/connect")) {
-            String databaseName = req.getParameter("dbname");
-            String userName = req.getParameter("username");
-            String password = req.getParameter("password");
+            queryParameters.setDatabase(req.getParameter("dbname"));
+            queryParameters.setUserName(req.getParameter("username"));
+            queryParameters.setPassword(req.getParameter("password"));
             try {
-                DatabaseManager.connect(databaseName, userName, password);
+                service.connect();
                 resp.sendRedirect(resp.encodeRedirectURL("menu"));
             } catch (Exception e) {
                 req.setAttribute("message", e.getMessage());

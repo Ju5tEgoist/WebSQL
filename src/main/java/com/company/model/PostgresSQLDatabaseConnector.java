@@ -1,22 +1,20 @@
 package com.company.model;
 
 import org.springframework.stereotype.Component;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 /**
  * Created by yulia on 28.09.16.
  */
 
 @Component
-public class DatabaseManager {
-    private static Connection connection;
-    private static Statement stmt;
+public class PostgresSQLDatabaseConnector implements SQLDatabaseConnector {
+    private Connection connection;
 
-    public static Connection connect(String database, String user, String password) throws SQLException {
+    @Override
+    public Connection connect(String database, String user, String password)  {
             try {
                 Class.forName("org.postgresql.Driver");
             } catch (ClassNotFoundException e) {
@@ -34,15 +32,11 @@ public class DatabaseManager {
 
             }
 
-        stmt = connection.createStatement();
         return connection;
     }
 
-    public Statement getStatement(){
-        return stmt;
-    }
-
-    public Connection getConnection()  {
+    @Override
+     public Connection getConnection()  {
         return connection;
     }
 }

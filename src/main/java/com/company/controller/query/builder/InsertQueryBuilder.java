@@ -1,8 +1,7 @@
 package com.company.controller.query.builder;
 
 import com.company.controller.query.parameter.QueryParameters;
-import com.company.controller.query.parameter.QueryParametersImpl;
-import com.company.model.DatabaseManager;
+import com.company.model.SQLDatabaseConnector;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,12 +17,12 @@ import java.util.List;
 public class InsertQueryBuilder implements QueryBuilder {
 
     @Autowired
-    DatabaseManager databaseManager;
+    SQLDatabaseConnector sqlDatabaseConnector;
 
     private List getInsertColumnsName(QueryParameters queryParameters) throws SQLException {
         List<String> insertColumnsName = new ArrayList<>();
         String query = "SELECT * FROM " + queryParameters.getTableName();
-        ResultSet rs = databaseManager.getStatement().executeQuery(query);
+        ResultSet rs = sqlDatabaseConnector.getConnection().createStatement().executeQuery(query);
         for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
             insertColumnsName.add(rs.getMetaData().getColumnName(i));
         }
