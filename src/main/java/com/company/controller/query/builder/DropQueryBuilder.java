@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class DropQueryBuilder implements QueryBuilder {
+    @Override
     public String build(QueryParameters queryParameters) {
         return "DROP TABLE " + queryParameters.getTableName();
     }

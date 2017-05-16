@@ -9,7 +9,7 @@ import java.sql.SQLException;
 @Component
 public class UpdateTableQueryBuilder implements QueryBuilder {
     @Override
-    public String build(QueryParameters queryParameters) throws SQLException {
+    public String build(QueryParameters queryParameters)  {
         return "UPDATE " + queryParameters.getTableName() + " " + "SET" + " "
                 + queryParameters.getColumn() + " " + "=" + " " + queryParameters.getNewValue() + " "
                 + "WHERE" + " " + queryParameters.getColumn() + " " + "=" + queryParameters.getOldValue() ;

@@ -30,7 +30,6 @@ public class CreateQueryBuilder implements QueryBuilder {
         CreateColumnDefinitionPropertiesProvider columnDefinitionProvider = new CreateColumnDefinitionPropertiesProvider();
         List<CreateColumnDefinition> columnDefinition = columnDefinitionProvider.getProperties(queryParameters.getColumnsNumber(), queryParameters.getColumnsName());
         properties = getQueryProperties(properties, columnDefinition);
-        System.out.println("CREATE TABLE " + queryParameters.getTableName() + "(" + properties + ")");
         return "CREATE TABLE " + queryParameters.getTableName() + "(" + properties + ")";
     }
 

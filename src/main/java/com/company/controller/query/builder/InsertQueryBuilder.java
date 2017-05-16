@@ -19,17 +19,23 @@ public class InsertQueryBuilder implements QueryBuilder {
     @Autowired
     SQLDatabaseConnector sqlDatabaseConnector;
 
-    private List getInsertColumnsName(QueryParameters queryParameters) throws SQLException {
+    private List getInsertColumnsName(QueryParameters queryParameters)  {
         List<String> insertColumnsName = new ArrayList<>();
         String query = "SELECT * FROM " + queryParameters.getTableName();
-        ResultSet rs = sqlDatabaseConnector.getConnection().createStatement().executeQuery(query);
-        for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
-            insertColumnsName.add(rs.getMetaData().getColumnName(i));
+        ResultSet rs = null;
+        try {
+            rs = sqlDatabaseConnector.getConnection().createStatement().executeQuery(query);
+            for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+                insertColumnsName.add(rs.getMetaData().getColumnName(i));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+
         }
         return insertColumnsName;
     }
     @Override
-    public String build(QueryParameters queryParameters) throws SQLException {
+    public String build(QueryParameters queryParameters)  {
         List<String> insertColumnsName = getInsertColumnsName(queryParameters);
         return "INSERT INTO " + queryParameters.getTableName() + " " + "("
                 + StringUtils.join(insertColumnsName, ",")
