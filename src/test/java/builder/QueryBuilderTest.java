@@ -81,6 +81,7 @@ public class QueryBuilderTest {
     @Test
     public void shouldReturnUpdateQuery(){
         queryParameters.setTableName("newtable");
+        queryParameters.setColumn(null);
         assertEquals(updateTableQueryBuilder.build(queryParameters), "UPDATE " + "newtable" + " " + "SET"
                 + " " + null + " " + "=" + " " + null + " " + "WHERE" + " " + null + " " + "=" + null);
     }

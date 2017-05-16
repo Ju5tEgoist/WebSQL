@@ -51,6 +51,4 @@ public class FindProviderTest {
         assertNotNull(findProvider.tablePresentation("first", ""));
     }
 
-
-
 }
