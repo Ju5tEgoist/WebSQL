@@ -20,6 +20,7 @@ public class MainServlet extends HttpServlet {
 
     @Autowired
     Service service;
+    @Autowired
     QueryParameters queryParameters;
 
 
@@ -59,8 +60,8 @@ public class MainServlet extends HttpServlet {
             req.getRequestDispatcher("create.jsp").forward(req, resp);
         }else if(action.equals("/insert")){
             req.getRequestDispatcher("insert.jsp").forward(req, resp);
-        }else if(action.equals("/deleteTableQueryBuilder")){
-            req.getRequestDispatcher("deleteTableQueryBuilder.jsp").forward(req, resp);
+        }else if(action.equals("/delete")){
+            req.getRequestDispatcher("delete.jsp").forward(req, resp);
         }else if(action.equals("/update")){
             req.getRequestDispatcher("update.jsp").forward(req, resp);
         } else {

@@ -13,7 +13,7 @@ public class QueryParametersImpl implements QueryParameters {
 
     public QueryParametersImpl() {}
 
-    private List<String> columnsName;
+    private List<String> columnsName = new ArrayList<>();
     private int columnsNumber;
     private String tableName;
     private int i = 1;
@@ -76,7 +76,6 @@ public class QueryParametersImpl implements QueryParameters {
         this.database = database;
         this.userName = userName;
         this.password = password;
-        this.columnsName = new ArrayList<>();
         this.columnsNumber = columnsNumber;
         this.tableName = tableName;
         this.i = i;
