@@ -5,7 +5,7 @@
     <title>SQLCmd</title>
 </head>
 <body>
-Йойкс! Что-то пошло не так: ${message}<br>
+Something goes wrong. Please verify that you are connected to database${message}<br>
 <a href="menu">menu</a><br>
 </body>
 </html>

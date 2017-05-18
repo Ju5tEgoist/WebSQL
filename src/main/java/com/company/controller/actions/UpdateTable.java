@@ -1,18 +1,39 @@
 package com.company.controller.actions;
 
 import com.company.controller.AbstractAction;
+import com.company.controller.query.parameter.QueryParameters;
+import com.company.controller.service.Service;
+import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
 
 /**
  * Created by yulia on 16.05.17.
  */
+@Component
 public class UpdateTable extends AbstractAction {
+
     @Override
-    public boolean isExecuteProcess(String action) {
-        return false;
+    public boolean canProcess(String action) {
+        return "/updateTable".equals(action);
     }
 
     @Override
-    public void executeProcess() {
+    public void process(HttpServletRequest req, HttpServletResponse resp) {
+        queryParameters.setColumn(req.getParameter("column"));
+        queryParameters.setOldValue(req.getParameter("oldValue"));
+        queryParameters.setNewValue(req.getParameter("newValue"));
+        try {
+            service.update();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
+    @Override
+    public void forwardToJsp(HttpServletRequest req, HttpServletResponse resp) {
+        //do nothing
     }
 }
