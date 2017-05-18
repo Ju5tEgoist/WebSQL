@@ -28,7 +28,7 @@ public class MainServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String action = getAction(req);
+        String action = trimAction(req);
         actionManager.getAction(action).forwardToJsp(req, resp);
     }
 
@@ -39,7 +39,21 @@ public class MainServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String action = getAction(req);
+        String action = trimAction(req);
         actionManager.getAction(action).process(req, resp);
+    }
+
+    private String trimAction(HttpServletRequest req){
+        String action = getAction(req);
+        char[] c = action.toCharArray();
+        String resultAction = "";
+        for (int i = 0; i < c.length; i++) {
+            if((c[i] > 'a' && c[i] < 'z') || c[i] == '/'){
+                resultAction+=c[i];
+            } else {
+                return resultAction;
+            }
+        }
+        return resultAction;
     }
 }

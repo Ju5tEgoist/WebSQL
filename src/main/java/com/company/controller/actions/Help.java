@@ -24,12 +24,6 @@ public class Help extends AbstractAction {
 
     @Override
     public void process(HttpServletRequest req, HttpServletResponse resp) {
-        MainServlet mainServlet = new MainServlet();
-        try {
-            mainServlet.doGet(req, resp);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
