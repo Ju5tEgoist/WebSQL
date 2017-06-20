@@ -1,10 +1,9 @@
-package com.company.controller.query.builder;
+package com.company.model.query.builder;
 
-import com.company.controller.query.executor.UpdateSqlQueryExecutor;
-import com.company.controller.query.parameter.QueryParameters;
+import com.company.model.query.executor.UpdateSqlQueryExecutor;
+import com.company.model.query.parameter.QueryParameters;
 import com.company.model.CreateColumnDefinition;
 import com.company.model.CreateColumnDefinitionPropertiesProvider;
-import com.company.model.PostgresSQLDatabaseConnector;
 import com.company.model.SQLDatabaseConnector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

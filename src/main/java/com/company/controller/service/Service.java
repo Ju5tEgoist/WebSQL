@@ -1,6 +1,7 @@
 package com.company.controller.service;
 
-import com.company.controller.query.parameter.QueryParameters;
+import com.company.model.SQLDatabaseConnector;
+import com.company.model.query.parameter.QueryParameters;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -36,5 +37,5 @@ public interface Service {
 
     int getInsertColumnsNumber(QueryParameters queryParameters) throws SQLException;
 
-    void connect();
+    SQLDatabaseConnector connect(String dbName, String userName, String password);
 }

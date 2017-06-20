@@ -1,4 +1,4 @@
-package com.company.controller.query.executor;
+package com.company.model.query.executor;
 
 import com.company.model.SQLDatabaseConnector;
 import org.springframework.beans.factory.annotation.Autowired;

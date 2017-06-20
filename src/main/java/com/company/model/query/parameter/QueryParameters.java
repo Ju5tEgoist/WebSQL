@@ -1,4 +1,4 @@
-package com.company.controller.query.parameter;
+package com.company.model.query.parameter;
 
 import java.util.List;
 

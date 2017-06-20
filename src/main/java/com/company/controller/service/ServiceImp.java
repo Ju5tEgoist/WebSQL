@@ -1,12 +1,12 @@
 package com.company.controller.service;
 
-import com.company.controller.query.builder.*;
-import com.company.controller.query.executor.UpdateSqlQueryExecutor;
-import com.company.controller.query.parameter.QueryParameters;
-import com.company.model.PostgresSQLDatabaseConnector;
+import com.company.model.query.builder.*;
+import com.company.model.query.executor.UpdateSqlQueryExecutor;
+import com.company.model.query.parameter.QueryParameters;
 import com.company.model.FindProvider;
 import com.company.model.SQLDatabaseConnector;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -14,7 +14,7 @@ import java.util.*;
 /**
  * Created by yulia on 06.04.17.
  */
-@org.springframework.stereotype.Service
+@Component
 public class ServiceImp implements Service {
 
     private SQLDatabaseConnector sqlDatabaseConnector;
@@ -127,8 +127,8 @@ public class ServiceImp implements Service {
     }
 
     @Override
-    public void connect(){
-        sqlDatabaseConnector.connect(queryParameters.getDatabase(), queryParameters.getUserName(),
-                queryParameters.getPassword());
+    public SQLDatabaseConnector connect(String dbName, String userName, String password){
+        sqlDatabaseConnector.connect(dbName, userName, password);
+        return sqlDatabaseConnector;
     }
 }

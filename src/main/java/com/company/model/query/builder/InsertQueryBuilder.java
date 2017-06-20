@@ -1,6 +1,6 @@
-package com.company.controller.query.builder;
+package com.company.model.query.builder;
 
-import com.company.controller.query.parameter.QueryParameters;
+import com.company.model.query.parameter.QueryParameters;
 import com.company.model.SQLDatabaseConnector;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

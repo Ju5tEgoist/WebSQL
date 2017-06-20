@@ -1,5 +1,6 @@
 package com.company.view;
 
+import com.company.model.FindProvider;
 import com.company.model.SQLDatabaseConnector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,8 @@ public class TablePresenter {
 
     @Autowired
     SQLDatabaseConnector sqlDatabaseConnector;
+    @Autowired
+    FindProvider findProvider;
 
     public Map<String, List<String>> getTableData(String selectedTableName, int limit, int offset) throws SQLException {
         Connection connection = sqlDatabaseConnector.getConnection();
@@ -39,4 +42,5 @@ public class TablePresenter {
         }
         return tableData;
     }
+
 }

@@ -1,5 +1,5 @@
-package com.company.controller.query.builder;
-import com.company.controller.query.parameter.QueryParameters;
+package com.company.model.query.builder;
+import com.company.model.query.parameter.QueryParameters;
 import org.springframework.stereotype.Component;
 import java.sql.SQLException;
 

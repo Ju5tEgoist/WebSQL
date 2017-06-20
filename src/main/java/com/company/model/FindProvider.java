@@ -19,7 +19,7 @@ public class FindProvider {
     @Autowired
     private TablePresenter tablePresenter;
     @Autowired
-    private Service service;
+    public Service service;
 
     private String selectedTableName;
 

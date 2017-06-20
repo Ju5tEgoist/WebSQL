@@ -1,7 +1,6 @@
-package com.company.controller.query.builder;
+package com.company.model.query.builder;
 
-import com.company.controller.query.parameter.QueryParameters;
-import com.company.controller.query.parameter.QueryParametersImpl;
+import com.company.model.query.parameter.QueryParameters;
 import org.springframework.stereotype.Component;
 
 /**
