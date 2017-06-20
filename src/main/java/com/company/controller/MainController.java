@@ -4,6 +4,7 @@ import com.company.controller.service.Service;
 import com.company.model.SQLDatabaseConnector;
 import com.company.model.query.parameter.QueryParameters;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.SQLException;
 
 
 /**
@@ -27,8 +29,6 @@ public class MainController {
     @Autowired
     QueryParameters queryParameters;
 
-    @Autowired
-    ConnectionsParameters connectionsParameters;
 
     private SQLDatabaseConnector getManager(HttpSession session) {
         return (SQLDatabaseConnector) session.getAttribute("db_manager");
@@ -46,7 +46,7 @@ public class MainController {
 
 
     @RequestMapping(value = "/help", method = RequestMethod.GET)
-    public String process(HttpServletRequest req, HttpServletResponse resp) {
+    public String process(HttpServletRequest req) {
         req.setAttribute("items", service.getCommandsList());
        return "help";
     }
@@ -59,19 +59,20 @@ public class MainController {
 
 
     @RequestMapping(value = "/clear", method = RequestMethod.GET)
-    public String clearGET(HttpSession httpSession) throws ServletException, IOException {
-        String tableName = getAttribute(httpSession,"tName");
-        queryParameters.setTableName(tableName);
+    public String clearGET() throws ServletException, IOException {
         return "clear";
     }
 
     @RequestMapping(value = "/clear", method = RequestMethod.POST)
-    public String clearPOST() throws ServletException, IOException {
+    public String clearPOST(HttpSession httpSession, HttpServletRequest request) throws ServletException, IOException {
+        String tableName = request.getParameter("tName");
+        httpSession.setAttribute("tName", tableName);
+        queryParameters.setTableName(tableName);
         try {
             service.clearTable();
-            return "menu";
+            return "redirect:/menu";
         } catch (Exception e) {
-            return "error";
+            return "redirect:/error";
         }
     }
 
@@ -94,7 +95,7 @@ public class MainController {
             //TODO encryption
             String password = request.getParameter("password");
             session.setAttribute("password", password);
-            service.connect(dbName,userName, password);
+            service.connect(dbName, userName, password);
             return "redirect:" + "/menu";
         } catch (Exception e) {
             e.printStackTrace();
@@ -104,15 +105,19 @@ public class MainController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
-    public String createGET(HttpSession httpSession) throws ServletException, IOException {
-        queryParameters.setTableName(getAttribute(httpSession,"tName"));
-        queryParameters.setColumnsNumber(getAttribute(httpSession,"cNumber"));
-        queryParameters.setCounter(1);
+    public String createGET() throws ServletException, IOException {
         return "create";
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String createPOST() throws ServletException, IOException {
+    public String createPOST(HttpSession httpSession, HttpServletRequest request) throws ServletException, IOException {
+        String tableName = request.getParameter("tName");
+        String columnsNumber = request.getParameter("cNumber");
+        httpSession.setAttribute("tName", tableName);
+        httpSession.setAttribute("cNumber", columnsNumber);
+        queryParameters.setTableName(tableName);
+        queryParameters.setColumnsNumber(columnsNumber);
+        queryParameters.setCounter(1);
         try {
             return "createColumns";
         } catch (Exception e) {
@@ -120,16 +125,11 @@ public class MainController {
         }
     }
 
-    @RequestMapping(value = "/createColumns", method = RequestMethod.GET)
-    public String createColumnsGET(HttpSession httpSession) throws ServletException, IOException {
-        queryParameters.setTableName(getAttribute(httpSession,"tName"));
-        queryParameters.setColumnsNumber(getAttribute(httpSession,"cNumber"));
-        queryParameters.setCounter(1);
-        return "create";
-    }
-
     @RequestMapping(value = "/createColumns", method = RequestMethod.POST)
-    public String createColumnsPOST() throws ServletException, IOException {
+    public String createColumnsPOST(HttpSession httpSession, HttpServletRequest request) throws ServletException, IOException {
+        String columnName = request.getParameter("cName");
+        httpSession.setAttribute("cName", columnName);
+        queryParameters.addName(columnName);
         if(queryParameters.getCounter() < queryParameters.getColumnsNumber()){
             try {
                 return "createColumns";
@@ -140,23 +140,23 @@ public class MainController {
         else {
             try {
                 service.createTable();
-                return "menu";
+                return "redirect:" +"/menu";
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return "error";
+            return "redirect:" + "/error";
         }
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public String deleteGET(HttpSession httpSession) throws ServletException, IOException {
-        String tableName = getAttribute(httpSession,"tName");
-        queryParameters.setTableName(tableName);
+    public String deleteGET() throws ServletException, IOException {
         return "delete";
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public String deletePOST(Model model) throws ServletException, IOException {
+    public String deletePOST(Model model, HttpSession httpSession) throws ServletException, IOException {
+        String tableName = getAttribute(httpSession,"tName");
+        queryParameters.setTableName(tableName);
         try {
             model.addAttribute("tabledata", service.tablePresenter(queryParameters.getTableName(),
                     ""));
@@ -168,24 +168,51 @@ public class MainController {
     }
 
     @RequestMapping(value = "/drop", method = RequestMethod.GET)
-    public String dropGET(HttpSession httpSession) throws ServletException, IOException {
-        String tableName = getAttribute(httpSession,"tName");
-        queryParameters.setTableName(tableName);
+    public String dropGET() throws ServletException, IOException {
         return "drop";
     }
 
     @RequestMapping(value = "/drop", method = RequestMethod.POST)
-    public String dropPOST(Model model) throws ServletException, IOException {
+    public String dropPOST(HttpServletRequest request) throws ServletException, IOException {
+        String tableName = request.getParameter("tName");
+        queryParameters.setTableName(tableName);
         try {
             service.dropTable();
-           return "menu";
+           return "redirect:" + "/menu";
+        } catch (Exception e) {
+            return "redirect:" + "/error";
+        }
+    }
+
+    @RequestMapping(value = "/error", method = RequestMethod.GET)
+    public String errorGET() throws ServletException, IOException {
+        return "error";
+    }
+    @RequestMapping(value = "/update", method = RequestMethod.GET)
+    public String updateGET() throws ServletException, IOException {
+        return "update";
+    }
+
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public String updatePOST(HttpServletRequest request) throws ServletException, IOException, SQLException {
+        String tableName = request.getParameter("tName");
+        queryParameters.setTableName(tableName);
+        request.setAttribute("items", service.tablePresenter(tableName, ""));
+        return "updateValue";
+    }
+
+    @RequestMapping(value = "/updateValue", method = RequestMethod.POST)
+    public String updateValuePOST(HttpServletRequest request) throws SQLException {
+        request.setAttribute("items", service.tablePresenter(queryParameters.getTableName(), ""));
+        queryParameters.setColumn(request.getParameter("column"));
+        queryParameters.setOldValue(request.getParameter("oldValue"));
+        queryParameters.setNewValue(request.getParameter("newValue"));
+        try {
+            service.update();
+            return "redirect:" + "/menu";
         } catch (Exception e) {
             return "error";
         }
     }
 
-    @RequestMapping(value = "/error", method = RequestMethod.GET)
-    public String errorGET(HttpSession httpSession) throws ServletException, IOException {
-        return "error";
-    }
 }

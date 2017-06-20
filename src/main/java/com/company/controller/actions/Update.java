@@ -25,7 +25,7 @@
 //        queryParameters.setTableName(tableName);
 //        try {
 //            req.setAttribute("tabledata", service.tablePresenter(tableName, ""));
-//            req.getRequestDispatcher("updateTable.jsp").forward(req, resp);
+//            req.getRequestDispatcher("updateValue.jsp").forward(req, resp);
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
