@@ -154,17 +154,24 @@ public class MainController {
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public String deletePOST(Model model, HttpSession httpSession) throws ServletException, IOException {
-        String tableName = getAttribute(httpSession,"tName");
+    public String deletePOST(HttpServletRequest request) throws ServletException, IOException, SQLException {
+        String tableName = request.getParameter("tName");
         queryParameters.setTableName(tableName);
-        try {
-            model.addAttribute("tabledata", service.tablePresenter(queryParameters.getTableName(),
-                    ""));
-            return "delete";
-        } catch (Exception e) {
-            return "error";
-        }
+        request.setAttribute("items", service.tablePresenter(queryParameters.getTableName(),
+                ""));
+        return "deleteValue";
+    }
 
+    @RequestMapping(value = "/deleteValue", method = RequestMethod.POST)
+    public String deleteValuePOST(HttpServletRequest request) throws ServletException, IOException {
+        try {
+            queryParameters.setColumn(request.getParameter("columnName"));
+            queryParameters.setValue(request.getParameter("value"));
+            service.delete();
+            return "redirect:" + "/menu";
+        } catch (Exception e) {
+            return "redirect:" + "/error";
+        }
     }
 
     @RequestMapping(value = "/drop", method = RequestMethod.GET)
@@ -197,7 +204,6 @@ public class MainController {
     public String updatePOST(HttpServletRequest request) throws ServletException, IOException, SQLException {
         String tableName = request.getParameter("tName");
         queryParameters.setTableName(tableName);
-        request.setAttribute("items", service.tablePresenter(tableName, ""));
         return "updateValue";
     }
 
