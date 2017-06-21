@@ -4,7 +4,6 @@ import com.company.controller.service.Service;
 import com.company.model.SQLDatabaseConnector;
 import com.company.model.query.parameter.QueryParameters;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,10 +31,6 @@ public class MainController {
 
     private SQLDatabaseConnector getManager(HttpSession session) {
         return (SQLDatabaseConnector) session.getAttribute("db_manager");
-    }
-
-    private String getAttribute(HttpSession httpSession, String value){
-        return (String) httpSession.getAttribute(value);
     }
 
     @RequestMapping(value = "/menu", method = RequestMethod.GET)
@@ -216,6 +211,24 @@ public class MainController {
         try {
             service.update();
             return "redirect:" + "/menu";
+        } catch (Exception e) {
+            return "redirect:" + "/error";
+        }
+    }
+
+    @RequestMapping(value = "/find", method = RequestMethod.GET)
+    public String findGET() throws ServletException, IOException {
+        return "find";
+    }
+
+    //TODO: fix "limit/offset"
+    @RequestMapping(value = "/find", method = RequestMethod.POST)
+    public String findPOST(HttpServletRequest request) throws ServletException, IOException {
+        String tableName = request.getParameter("tName");
+        String limOff = request.getParameter("LO");
+        try {
+            request.setAttribute("items", service.tablePresenter(tableName, limOff));
+            return "table";
         } catch (Exception e) {
             return "error";
         }

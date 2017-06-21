@@ -11,6 +11,7 @@
     <title>WebSQL</title>
 </head>
 <body>
+
 Please, enter table name in which you want to change value
 <form action="delete" method="post">
     <table>

@@ -12,16 +12,7 @@
     <title>WebSQL</title>
 </head>
 <body>
-<table>
-    <c:forEach items="${items}"  var="data" >
-        <tr>
-            <td>  <c:out value="${data.key}"/></td>
-            <c:forEach items="${data.value}"  var="val">
-                <td><c:out value="${val}"/></td>
-            </c:forEach>
-        </tr>
-    </c:forEach>
-</table>
+<jsp:include page="table.jsp" />
 <form action="updateValue" method="post">
     <table>
         <tr>
@@ -42,6 +33,5 @@
         </tr>
     </table>
 </form>
-<jsp:include page="footer.jsp" />
 </body>
 </html>

@@ -14,7 +14,7 @@
 </head>
 <body>
 <table>
-<c:forEach items="${tabledata}"  var="data" >
+<c:forEach items="${items}"  var="data" >
     <tr>
         <td>  <c:out value="${data.key}"/></td>
     <c:forEach items="${data.value}"  var="val">
@@ -23,5 +23,6 @@
     </tr>
 </c:forEach>
 </table>
+<jsp:include page="footer.jsp" />
 </body>
 </html>
