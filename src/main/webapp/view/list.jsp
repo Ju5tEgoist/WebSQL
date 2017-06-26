@@ -17,5 +17,7 @@ List of all available tables: <br>
 <c:forEach items="${items}"  var="item" >
     <a href="${item}">${item}</a> <br>
 </c:forEach>
+<p></p>>
+<jsp:include page="footer.jsp" />
 </body>
 </html>

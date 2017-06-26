@@ -7,7 +7,7 @@
 <body>
 All available command: <br>
 <c:forEach items="${items}"  var="item" >
-    <a href="${item}">${item.key}</a> - ${item.value} <br>
+    <a href="${item.key}">${item.key}</a> - ${item.value} <br>
 </c:forEach>
 </body>
 </html> 
