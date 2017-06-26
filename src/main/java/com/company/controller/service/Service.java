@@ -38,4 +38,7 @@ public interface Service {
     int getInsertColumnsNumber(QueryParameters queryParameters) throws SQLException;
 
     SQLDatabaseConnector connect(String dbName, String userName, String password);
+
+    List getInsertColumnsName() throws SQLException;
+
 }

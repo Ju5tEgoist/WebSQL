@@ -24,7 +24,6 @@ public class QueryParametersImpl implements QueryParameters {
     private String database;
     private String userName;
     private String password ;
-    private String limOff;
 
     @Override
     public String getUserName() {
@@ -72,7 +71,7 @@ public class QueryParametersImpl implements QueryParameters {
         return database;
     }
 
-    public QueryParametersImpl(int columnsNumber, String tableName, int i, String column, String oldValue, String newValue, String value, String database, String userName, String password, String limOff) {
+    public QueryParametersImpl(int columnsNumber, String tableName, int i, String column, String oldValue, String newValue, String value, String database, String userName, String password) {
         this.value = value;
         this.database = database;
         this.userName = userName;
@@ -83,7 +82,6 @@ public class QueryParametersImpl implements QueryParameters {
         this.column = column;
         this.oldValue = oldValue;
         this.newValue = newValue;
-        this.limOff = limOff;
     }
     @Override
     public String getColumn() {
@@ -141,10 +139,5 @@ public class QueryParametersImpl implements QueryParameters {
     @Override
     public void setNewValue(String newValue) {
         this.newValue = "'" + newValue + "'" ;
-    }
-
-    @Override
-    public void setLO(String limOff) {
-        this.limOff = limOff;
     }
 }

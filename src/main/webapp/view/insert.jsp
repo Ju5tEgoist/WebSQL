@@ -24,5 +24,6 @@ Enter target table name to add row
         </tr>
     </table>
 </form>
+<jsp:include page="footer.jsp" />
 </body>
 </html>

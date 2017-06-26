@@ -53,6 +53,4 @@ public interface QueryParameters {
     void setOldValue(String oldValue);
 
     void setNewValue(String newValue);
-
-    void setLO(String limOff);
 }

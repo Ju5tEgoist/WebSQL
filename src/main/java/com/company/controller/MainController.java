@@ -28,7 +28,6 @@ public class MainController {
     @Autowired
     QueryParameters queryParameters;
 
-
     private SQLDatabaseConnector getManager(HttpSession session) {
         return (SQLDatabaseConnector) session.getAttribute("db_manager");
     }
@@ -232,6 +231,48 @@ public class MainController {
         } catch (Exception e) {
             return "error";
         }
+    }
+
+    @RequestMapping(value = "/insert", method = RequestMethod.GET)
+    public String insertGET() throws ServletException, IOException {
+        return "insert";
+    }
+
+    @RequestMapping(value = "/insert", method = RequestMethod.POST)
+    public String insertPOST(HttpSession httpSession, HttpServletRequest request) throws ServletException, IOException {
+        String tableName = request.getParameter("tName");
+        httpSession.setAttribute("tName", tableName);
+        queryParameters.setTableName(tableName);
+        queryParameters.setCounter(1);
+        try {
+            return "insertColumns";
+        } catch (Exception e) {
+            return "error";
+        }
+    }
+
+    @RequestMapping(value = "/insertColumns", method = RequestMethod.POST)
+    public String insertColumnsPOST(HttpServletRequest request) throws ServletException, IOException, SQLException {
+        if(queryParameters.getCounter() <= service.getInsertColumnsNumber(queryParameters)){
+            try {
+                queryParameters.addValue(request.getParameter("value"));
+                //TODO: fix==>
+                    return "insertColumns";
+
+            } catch (Exception e) {
+                return "error";
+            }
+        }
+        else {
+            try {
+                service.insert();
+                return "redirect:" +"/menu";
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return "redirect:" + "/error";
+        }
+
     }
 
 }

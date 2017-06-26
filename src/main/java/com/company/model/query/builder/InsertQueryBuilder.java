@@ -19,7 +19,10 @@ public class InsertQueryBuilder implements QueryBuilder {
     @Autowired
     SQLDatabaseConnector sqlDatabaseConnector;
 
-    private List getInsertColumnsName(QueryParameters queryParameters) throws SQLException {
+    @Autowired
+    QueryParameters queryParameters;
+
+    public List getInsertColumnsName() throws SQLException {
         List<String> insertColumnsName = new ArrayList<>();
         String query = "SELECT * FROM " + queryParameters.getTableName();
         ResultSet rs = sqlDatabaseConnector.getConnection().createStatement().executeQuery(query);
@@ -30,7 +33,7 @@ public class InsertQueryBuilder implements QueryBuilder {
     }
     @Override
     public String build(QueryParameters queryParameters) throws SQLException {
-        List<String> insertColumnsName = getInsertColumnsName(queryParameters);
+        List<String> insertColumnsName = getInsertColumnsName();
         return "INSERT INTO " + queryParameters.getTableName() + " " + "("
                 + StringUtils.join(insertColumnsName, ",")
                 + ")" + " " + "VALUES" + " " + "(" + StringUtils.join(queryParameters.getInsertValues(),

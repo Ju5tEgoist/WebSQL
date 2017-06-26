@@ -131,4 +131,11 @@ public class ServiceImp implements Service {
         sqlDatabaseConnector.connect(dbName, userName, password);
         return sqlDatabaseConnector;
     }
+
+    @Override
+    public List getInsertColumnsName() throws SQLException {
+        return insertQueryBuilder.getInsertColumnsName();
+    }
+
+
 }
