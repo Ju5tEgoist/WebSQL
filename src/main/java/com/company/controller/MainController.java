@@ -66,7 +66,7 @@ public class MainController {
         }
     }
 
-    @RequestMapping(value = "/connect", params = {"connect"}, method = RequestMethod.GET)
+    @RequestMapping(value = "/connect", method = RequestMethod.GET)
     public String connectGET(HttpSession session){
         if (getManager(session) == null) {
             return "connect";
@@ -217,7 +217,6 @@ public class MainController {
         return "find";
     }
 
-    //TODO: fix "limit/offset"
     @RequestMapping(value = "/find", method = RequestMethod.POST)
     public String findPOST(HttpServletRequest request){
         String tableName = request.getParameter("tName");
@@ -249,24 +248,17 @@ public class MainController {
     }
 
     @RequestMapping(value = "/insertColumns", method = RequestMethod.POST)
-    public String insertColumnsPOST(HttpServletRequest request) throws SQLException {
-        if(queryParameters.getCounter() <= service.getInsertColumnsNumber(queryParameters)){
-            try {
-                queryParameters.addValue(request.getParameter("value"));
-                //TODO: fix==>
+    public String insertColumnsPOST(HttpServletRequest request)  {
+        try {
+            queryParameters.addValue(request.getParameter("value"));
+            if (queryParameters.getCounter() < service.getInsertColumnsNumber(queryParameters)) {
                 return "insertColumns";
-            } catch (Exception e) {
-                return "error";
-            }
-        }
-        else {
-            try {
+            } else {
                 service.insert();
-                return "redirect:" +"/menu";
-            } catch (Exception e) {
-                e.printStackTrace();
+                return "redirect:" + "/menu";
             }
-            return "redirect:" + "/error";
+        }catch (Exception e) {
+            return "error";
         }
     }
 

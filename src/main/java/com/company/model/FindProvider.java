@@ -61,7 +61,7 @@ public class FindProvider {
 
     public Map<String, List<String>> tablePresentation(String tableNameUser, String limitOffset)  {
         if (!limitOffset.equals("")) {
-            tablePresentationLO(tableNameUser, limitOffset);
+          return tablePresentationLO(tableNameUser, limitOffset);
         }
         Map<String, List<String>> tableData = null;
         try {
